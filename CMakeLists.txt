@@ -8,6 +8,9 @@ endif()
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
+set(EXTERNAL_LOCATION ${CMAKE_SOURCE_DIR}/external)
+set(SDL_LOCATION ${EXTERNAL_LOCATION})
+
 project(
     "3DGame"
     DESCRIPTION "simple 3D shoot up game"
@@ -17,6 +20,8 @@ project(
 include(Settings)
 include(Utils)
 include(Warnings)
+
+find_package(SDL2 REQUIRED)
 
 add_library(project_warnings INTERFACE)
 set_project_warnings(project_warnings)
@@ -29,13 +34,15 @@ endforeach()
 
 list(APPEND libs PUBLIC
     project_warnings
+    SDL2::Main
 )
 
 list(APPEND includes PUBLIC
     "${sources_folder}/"
 )
 
-list(APPEND dlls PUBLIC
+list(APPEND dlls
+    ${SDL2_DLLS}
 )
 
 add_executable (${PROJECT_NAME} ${sources})
