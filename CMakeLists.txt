@@ -9,7 +9,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
 set(EXTERNAL_LOCATION ${CMAKE_SOURCE_DIR}/external)
-set(SDL_LOCATION ${EXTERNAL_LOCATION})
 
 project(
     "3DGame"
@@ -21,10 +20,16 @@ include(Settings)
 include(Utils)
 include(Warnings)
 
-find_package(SDL2 REQUIRED)
-
 add_library(project_warnings INTERFACE)
 set_project_warnings(project_warnings)
+
+find_package(OpenGL REQUIRED)
+
+list(APPEND CMAKE_PREFIX_PATH "${EXTERNAL_LOCATION}/glew/")
+find_package(GLEW REQUIRED)
+
+list(APPEND CMAKE_PREFIX_PATH "${EXTERNAL_LOCATION}/SDL2/")
+find_package(SDL2 REQUIRED)
 
 set(sources_folder "src")
 get_subdirectories(source_folders "${CMAKE_SOURCE_DIR}/${sources_folder}")
@@ -34,16 +39,22 @@ endforeach()
 
 list(APPEND libs PUBLIC
     project_warnings
+    GLEW::GLEW
     SDL2::Main
+    opengl32
 )
 
 list(APPEND includes PUBLIC
     "${sources_folder}/"
+    ${EXTERNAL_LOCATION}/glm/
+    ${GLEW_INCLUDE_DIRS}
 )
 
 list(APPEND dlls
     ${SDL2_DLLS}
 )
+
+add_definitions(${GLEW_DEFINITIONS})
 
 add_executable (${PROJECT_NAME} ${sources})
 
