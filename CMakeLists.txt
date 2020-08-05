@@ -21,14 +21,18 @@ include(Warnings)
 add_library(project_warnings INTERFACE)
 set_project_warnings(project_warnings)
 
-add_source_folder(src/core)
+set(sources_folder "src")
+get_subdirectories(source_folders "${CMAKE_SOURCE_DIR}/${sources_folder}")
+foreach(folder ${source_folders})
+    add_source_folder("${sources_folder}/${folder}")
+endforeach()
 
 list(APPEND libs PUBLIC
     project_warnings
 )
 
 list(APPEND includes PUBLIC
-    src/
+    "${sources_folder}/"
 )
 
 list(APPEND dlls PUBLIC
@@ -38,9 +42,9 @@ add_executable (${PROJECT_NAME} ${sources})
 
 target_include_directories(${PROJECT_NAME} ${includes})
 
-if(${dlls})
-    target_link_libraries(${PROJECT_NAME} PUBLIC ${libs})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${libs})
 
+if(${dlls})
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E echo "Copying required dlls.."
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
