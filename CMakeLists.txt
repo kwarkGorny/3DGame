@@ -5,6 +5,12 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     return()
 endif()
 
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(LIB_PATH_SUFFIX x64)
+else()
+  set(LIB_PATH_SUFFIX x86)
+endif()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
@@ -47,29 +53,22 @@ list(APPEND libs PUBLIC
 list(APPEND includes PUBLIC
     "${sources_folder}/"
     ${EXTERNAL_LOCATION}/glm/
+    ${EXTERNAL_LOCATION}/stb/src
     ${GLEW_INCLUDE_DIRS}
 )
 
-list(APPEND dlls
-    ${SDL2_DLLS}
+list(APPEND STB_DEFINITIONS 
+    -DSTB_IMAGE_IMPLEMENTATION
+    -DSTBI_ONLY_PNG
 )
 
-add_definitions(${GLEW_DEFINITIONS})
+add_definitions(${GLEW_DEFINITIONS} ${STB_DEFINITIONS} -D_CRT_SECURE_NO_WARNINGS -DNOMINMAX)
 
 add_executable (${PROJECT_NAME} ${sources})
 
 target_include_directories(${PROJECT_NAME} ${includes})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${libs})
-
-if(${dlls})
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E echo "Copying required dlls.."
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${dlls}
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
-endif()
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/data)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -79,6 +78,14 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/data)
         $<TARGET_FILE_DIR:${PROJECT_NAME}>/data
     )
 endif()
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E echo "Copying required dlls.."
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${EXTERNAL_LOCATION}/SDL2/lib/${LIB_PATH_SUFFIX}/SDL2.dll"
+    "${EXTERNAL_LOCATION}/glew/bin/Release/x64/glew32.dll"
+    $<TARGET_FILE_DIR:${PROJECT_NAME}>
+)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
