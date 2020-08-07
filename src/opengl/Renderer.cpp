@@ -3,12 +3,12 @@
 #include "GLDebug.hpp"
 #include <gl/glew.h>
 
-void Renderer::clear()const
+void Renderer::clear()
 {
 	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
 }
 
-void Renderer::draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader) const
+void Renderer::draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader)
 {
 	shader.bind();
 	vertexArray.bind();

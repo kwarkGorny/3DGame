@@ -53,7 +53,8 @@ list(APPEND libs PUBLIC
 list(APPEND includes PUBLIC
     "${sources_folder}/"
     ${EXTERNAL_LOCATION}/glm/
-    ${EXTERNAL_LOCATION}/stb/src
+    ${EXTERNAL_LOCATION}/stb/src/
+    ${EXTERNAL_LOCATION}/spdlog/include/
     ${GLEW_INCLUDE_DIRS}
 )
 
