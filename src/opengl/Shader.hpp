@@ -19,22 +19,22 @@ public:
 	void unbind()const;
 
 
-	void setUniform(const std::string& name, int v)
+	void setUniform(const std::string& name, int v)const
 	{
 		CHECK_GL(glUniform1i(getLocation(name), v));
 	}
 
-	void setUniform(const std::string& name, const glm::vec4& v)
+	void setUniform(const std::string& name, const glm::vec4& v)const
 	{
 		CHECK_GL(glUniform4f(getLocation(name), v.r, v.g, v.b, v.a));
 	}
 
-	void setUniform(const std::string& name, const glm::mat4& m)
+	void setUniform(const std::string& name, const glm::mat4& m)const
 	{
 		CHECK_GL(glUniformMatrix4fv(getLocation(name), 1, GL_FALSE, &m[0][0]));
 	}
 
-	int getLocation(const std::string& name);
+	int getLocation(const std::string& name)const;
 
 private:
 	unsigned int m_Id;

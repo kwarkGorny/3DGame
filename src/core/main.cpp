@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	constexpr Fseconds slowWarring{ std::chrono::milliseconds(33) };
 
 	Application app;
-	if (app.initialize("Opengl test", 640, 480))
+	if (app.initialize("Opengl test", 1920, 1080))
 	{
 		app.run(fps, maxDelay, slowWarring);
 	}

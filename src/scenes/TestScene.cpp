@@ -1,8 +1,9 @@
 #include "TestScene.hpp"
 
-#include "basic/FileUtils.hpp"
+#include "components/Transform.hpp"
+#include "components/Renderable3D.hpp"
 
-#include "opengl/Renderer.hpp"
+#include "systems/Render3DSystem.hpp"
 
 #include <array>
 #include <glm/vec2.hpp>
@@ -22,34 +23,31 @@ constexpr std::array<unsigned int, 6> g_TestIndices = {
 };
 
 TestScene::TestScene()
-	: m_VertexArray()
-	, m_VertexBuffer(&g_TestPositions, g_TestPositions.size() * sizeof(float))
-	, m_IndexBuffer(g_TestIndices.data(), g_TestIndices.size())
-	, m_Texture("data/textures/button.png")
-	, m_Shader(loadFile("data/shaders/basic.vs"), loadFile("data/shaders/basic.fs"))
 {
-	glm::vec2 size = { 640, 480 };
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(size.x) / static_cast<float>(size.y), 0.1f, 100.0f);//glm::ortho(0.f, static_cast<float>(g_ScreenSize.x), 0.f, static_cast<float>(g_ScreenSize.y));
-	glm::mat4 view = glm::translate(glm::mat4(1.f), glm::vec3(0.0f, 0.0f, -3.0f));
 	glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-	glm::mat4 mvp = projection * view * model;
+	const auto test = m_Registry.create();
+	m_Registry.emplace<Transform>(test, model);
+	auto& renderable = m_Registry.emplace<Renderable3D>(test);
+	renderable.vertexArray = std::make_unique<VertexArray>();
+	renderable.vertexBuffer = std::make_unique<VertexBuffer>(g_TestPositions.data(), g_TestPositions.size() * sizeof(float));
+	renderable.indexBuffer = std::make_unique<IndexBuffer>(g_TestIndices.data(), g_TestIndices.size());
+	renderable.texture = std::make_unique<Texture>("data/textures/button.png");
+	renderable.shader = std::make_unique<Shader>(loadFile("data/shaders/basic.vs"), loadFile("data/shaders/basic.fs"));
 
 	VertexLayout vertexLayout;
 	vertexLayout.push<float>(2);
 	vertexLayout.push<float>(2);
-	m_VertexArray.add(m_VertexBuffer, vertexLayout);
+	renderable.vertexArray->add(*renderable.vertexBuffer, vertexLayout);
 
-	m_Texture.bind();
-	m_Shader.bind();
-	m_Shader.setUniform("u_Texture", 0);
-	m_Shader.setUniform("u_MVP", mvp);
+	renderable.texture->bind();
+	renderable.shader->bind();
+	renderable.shader->setUniform("u_Texture", 0);
+	renderable.shader->setUniform("u_MVP", model);
 
-	m_VertexArray.unbind();
-	m_VertexBuffer.unbind();
-	m_IndexBuffer.unbind();
-	//m_Texture.unbind();
-	m_Shader.unbind();
+	renderable.vertexArray->unbind();
+	renderable.vertexBuffer->unbind();
+	renderable.indexBuffer->unbind();
+	renderable.shader->unbind();
 }
 
 bool TestScene::update(Fseconds dt) noexcept
@@ -59,7 +57,7 @@ bool TestScene::update(Fseconds dt) noexcept
 
 bool TestScene::draw() noexcept
 {
-	Renderer::draw(m_VertexArray, m_IndexBuffer, m_Shader);
+	Render3DSystem::draw(m_Registry);
 	return false;
 }
 

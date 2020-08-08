@@ -68,7 +68,7 @@ void Shader::unbind() const
 	CHECK_GL(glUseProgram(0));
 }
 
-int Shader::getLocation(const std::string& name)
+int Shader::getLocation(const std::string& name)const
 {
 	return glGetUniformLocation(m_Id, name.c_str());
 }

@@ -2,11 +2,7 @@
 
 #include "scenes/IScene.hpp"
 
-#include "opengl/IndexBuffer.hpp"
-#include "opengl/VertexArray.hpp"
-#include "opengl/VertexBuffer.hpp"
-#include "opengl/Texture.hpp"
-#include "opengl/Shader.hpp"
+#include <entt/entity/registry.hpp>
 
 class TestScene : public IScene
 {
@@ -19,9 +15,5 @@ public:
 	bool handleEvent(const SDL_Event& event)noexcept final;
 
 private:
-	VertexArray m_VertexArray;
-	VertexBuffer m_VertexBuffer;
-	IndexBuffer m_IndexBuffer;
-	Texture m_Texture;
-	Shader m_Shader;
+	entt::registry m_Registry;
 };
