@@ -55,6 +55,7 @@ list(APPEND includes PUBLIC
     ${EXTERNAL_LOCATION}/glm/
     ${EXTERNAL_LOCATION}/stb/src/
     ${EXTERNAL_LOCATION}/spdlog/include/
+    ${EXTERNAL_LOCATION}/entt/src/
     ${GLEW_INCLUDE_DIRS}
 )
 
