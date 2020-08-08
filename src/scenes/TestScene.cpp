@@ -1,8 +1,10 @@
 #include "TestScene.hpp"
 
-#include "components/Transform.hpp"
+#include "components/Kinetic.hpp"
 #include "components/Renderable3D.hpp"
+#include "components/Transform.hpp"
 
+#include "systems/KineticSystem.hpp"
 #include "systems/Render3DSystem.hpp"
 
 #include <array>
@@ -26,7 +28,9 @@ TestScene::TestScene()
 {
 	glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	const auto test = m_Registry.create();
-	m_Registry.emplace<Transform>(test, model);
+	m_Registry.emplace<Transform>(test, glm::mat4(1.0f));
+	m_Registry.emplace<Kinetic>(test, glm::vec3(0.f, 0.f, -0.5f));
+
 	auto& renderable = m_Registry.emplace<Renderable3D>(test);
 	renderable.vertexArray = std::make_unique<VertexArray>();
 	renderable.vertexBuffer = std::make_unique<VertexBuffer>(g_TestPositions.data(), g_TestPositions.size() * sizeof(float));
@@ -52,6 +56,7 @@ TestScene::TestScene()
 
 bool TestScene::update(Fseconds dt) noexcept
 {
+	KineticSystem::update(m_Registry, dt);
 	return false;
 }
 
