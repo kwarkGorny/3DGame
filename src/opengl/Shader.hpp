@@ -3,7 +3,9 @@
 #include <string>
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
-#include "GLDebug.hpp"
+#include <memory>
+
+#include "Material.hpp"
 
 class Shader
 {
@@ -19,23 +21,18 @@ public:
 	void unbind()const;
 
 
-	void setUniform(const std::string& name, int v)const
-	{
-		CHECK_GL(glUniform1i(getLocation(name), v));
-	}
-
-	void setUniform(const std::string& name, const glm::vec4& v)const
-	{
-		CHECK_GL(glUniform4f(getLocation(name), v.r, v.g, v.b, v.a));
-	}
-
-	void setUniform(const std::string& name, const glm::mat4& m)const
-	{
-		CHECK_GL(glUniformMatrix4fv(getLocation(name), 1, GL_FALSE, &m[0][0]));
-	}
+	void setUniform(const std::string& name, int v)const;
+	void setUniform(const std::string& name, float v)const;
+	void setUniform(const std::string& name, const glm::vec3& v)const;
+	void setUniform(const std::string& name, const glm::vec4& v)const;
+	void setUniform(const std::string& name, const glm::mat4& m)const;
+	void setUniform(const std::string& name, const Material& m)const;
+	void setUniform(const std::string& name, const Light& l)const;
 
 	int getLocation(const std::string& name)const;
 
 private:
 	unsigned int m_Id;
 };
+
+using SharedShader = std::shared_ptr<Shader>;

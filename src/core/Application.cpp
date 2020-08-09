@@ -1,6 +1,9 @@
 #include "Application.hpp"
 
+#include "admins/InputAdmin.hpp"
+
 #include "basic/Logger.hpp"
+#include "opengl/GLDebug.hpp"
 #include "opengl/Renderer.hpp"
 #include "scenes/TestScene.hpp"
 #include "sdl2/events.hpp"
@@ -43,8 +46,7 @@ bool Application::initialize(const std::string& title, int width, int height)noe
 		return false;
 	}
 	m_IsOpen = true;
-	CHECK_GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-	CHECK_GL(glEnable(GL_BLEND));
+	Renderer::initialize();
 	m_Scenes.push_back(std::make_unique<TestScene>());
 	return true;
 }
@@ -87,6 +89,7 @@ void Application::run(Fseconds fps, Fseconds maxDelay, Fseconds slowWarring)noex
 					logger::info("Game unpaused due to focuse gain");
 				}
 			}
+			g_InputAdmin.handleEvent(event);
 			m_Scenes.handleEvent(event);
 		});
 
@@ -102,12 +105,14 @@ void Application::run(Fseconds fps, Fseconds maxDelay, Fseconds slowWarring)noex
 			m_Scenes.draw();
 
 			m_Window.glSwap();
+
+			Renderer::flush();
 		}
 
 		m_IsOpen &= m_Scenes.isValid();
 
 		const auto dtFrame = std::chrono::duration_cast<Fseconds>(std::chrono::steady_clock::now() - now);
-		logger::warning(slowWarring > dtFrame, "Slow Frame dt {}s", dtFrame.count());
+		logger::warning(dtFrame > slowWarring, "Slow Frame dt {}s", dtFrame.count());
 
 		std::this_thread::sleep_for(fps - dtFrame);
 	}

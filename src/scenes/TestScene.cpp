@@ -1,68 +1,121 @@
 #include "TestScene.hpp"
 
+#include "admins/MeshAdmin.hpp"
+#include "admins/ShaderAdmin.hpp"
+#include "admins/TextureAdmin.hpp"
+
 #include "components/Kinetic.hpp"
+#include "components/Player.hpp"
 #include "components/Renderable3D.hpp"
 #include "components/Transform.hpp"
 
 #include "systems/KineticSystem.hpp"
+#include "systems/PlayerSystem.hpp"
 #include "systems/Render3DSystem.hpp"
+
+#include "opengl/Mesh.hpp"
 
 #include <array>
 #include <glm/vec2.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <SDL_events.h>
 
-constexpr std::array g_TestPositions = {
-	-0.5f, -0.5f, 0.f, 0.f,
-	0.5f, -0.5f, 1.f, 0.f,
-	0.5f, 0.5f, 1.f, 1.f,
-	-0.5f, 0.5f, 0.f, 1.f,
+std::vector<Vertex> vertices = {
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
+        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
+        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
+        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
+
+        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
+        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
+        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
+        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
+
+        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
+        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
+        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
+
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
+        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
+        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
+        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
+        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
+
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
+        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
+        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
+        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
+        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
+        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
+
+        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f) },
+        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f) },
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f) },
+        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f) },
+        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f) },
+        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f) }
+};
+std::vector<unsigned int> indices = {};
+/*
+std::vector<Vertex> vertices = {
+	{ glm::vec3(-0.5f, 0.5f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec2(0.f, 1.f) },
+	{ glm::vec3(-0.5f, -0.5f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec2(0.f, 0.f) },
+	{ glm::vec3(0.5f, -0.5f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec2(1.f, 0.f) },
+	{ glm::vec3(0.5f, 0.5f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec2(0.f, 0.f) }
 };
 
-constexpr std::array<unsigned int, 6> g_TestIndices = {
+std::vector<unsigned int> indices = {
 	0, 1, 2,
-	2, 3, 0
+	0, 2, 3
 };
+*/
 
 TestScene::TestScene()
 {
-	glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	const auto test = m_Registry.create();
-	m_Registry.emplace<Transform>(test, glm::mat4(1.0f));
-	m_Registry.emplace<Kinetic>(test, glm::vec3(0.f, 0.f, -0.5f));
+	m_Registry.emplace<Transform>(test);
+	m_Registry.emplace<Kinetic>(test);
+	m_Registry.emplace<Player>(test);
 
 	auto& renderable = m_Registry.emplace<Renderable3D>(test);
-	renderable.vertexArray = std::make_unique<VertexArray>();
-	renderable.vertexBuffer = std::make_unique<VertexBuffer>(g_TestPositions.data(), g_TestPositions.size() * sizeof(float));
-	renderable.indexBuffer = std::make_unique<IndexBuffer>(g_TestIndices.data(), g_TestIndices.size());
-	renderable.texture = std::make_unique<Texture>("data/textures/button.png");
-	renderable.shader = std::make_unique<Shader>(loadFile("data/shaders/basic.vs"), loadFile("data/shaders/basic.fs"));
-
-	VertexLayout vertexLayout;
-	vertexLayout.push<float>(2);
-	vertexLayout.push<float>(2);
-	renderable.vertexArray->add(*renderable.vertexBuffer, vertexLayout);
-
-	renderable.texture->bind();
-	renderable.shader->bind();
-	renderable.shader->setUniform("u_Texture", 0);
-	renderable.shader->setUniform("u_MVP", model);
-
-	renderable.vertexArray->unbind();
-	renderable.vertexBuffer->unbind();
-	renderable.indexBuffer->unbind();
-	renderable.shader->unbind();
+	//renderable.mesh = std::make_shared<Mesh>(MeshCPU(vertices, indices));
+    renderable.mesh = g_MeshAdmin["data/obj/ship/ship.obj"];
+    renderable.texture = g_TextureAdmin["data/textures/teapot.png"];
+	renderable.shader = g_ShaderAdmin["data/shaders/basic"];
+    renderable.material = { {1.0f, 0.5f, 0.31f}, {1.0f, 0.5f, 0.31f}, {0.5f, 0.5f, 0.5f}, 32.0f };
 }
 
 bool TestScene::update(Fseconds dt) noexcept
 {
+	PlayerSystem::update(m_Registry);
 	KineticSystem::update(m_Registry, dt);
 	return false;
 }
 
 bool TestScene::draw() noexcept
 {
-	Render3DSystem::draw(m_Registry);
+	float fov = glm::radians(90.f);
+	float nearPlane = 0.1f;
+	float farPlane = 1000.f;
+	glm::vec2 size = { 1920, 1080 };
+	glm::mat4 projection = glm::perspective(fov, static_cast<float>(size.x) / static_cast<float>(size.y), nearPlane, farPlane);
+
+	glm::vec3 camPos(0.f, 0.f, 5.f);
+	glm::mat4 view = glm::lookAt(camPos, camPos + glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
+	RenderData data = {
+		projection,
+		view
+	};
+
+	Render3DSystem::draw(m_Registry, data);
 	return false;
 }
 

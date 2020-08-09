@@ -1,5 +1,9 @@
 #include "Shader.hpp"
 
+
+#include "basic/Logger.hpp"
+#include "GLDebug.hpp"
+
 #include <iostream>
 #include <memory>
 
@@ -68,7 +72,50 @@ void Shader::unbind() const
 	CHECK_GL(glUseProgram(0));
 }
 
+void Shader::setUniform(const std::string& name, int v)const
+{
+	CHECK_GL(glUniform1i(getLocation(name), v));
+}
+
+void Shader::setUniform(const std::string& name, float v)const
+{
+	CHECK_GL(glUniform1f(getLocation(name), v));
+}
+
+void Shader::setUniform(const std::string& name, const glm::vec3& v)const
+{
+	CHECK_GL(glUniform3f(getLocation(name), v.r, v.g, v.b));
+}
+
+void Shader::setUniform(const std::string& name, const glm::vec4& v)const
+{
+	CHECK_GL(glUniform4f(getLocation(name), v.r, v.g, v.b, v.a));
+}
+
+void Shader::setUniform(const std::string& name, const glm::mat4& m)const
+{
+	CHECK_GL(glUniformMatrix4fv(getLocation(name), 1, GL_FALSE, &m[0][0]));
+}
+
+void Shader::setUniform(const std::string& name, const Material& m)const
+{
+	setUniform(name + ".ambient", m.ambient);
+	setUniform(name + ".diffuse", m.diffuse);
+	setUniform(name + ".specular", m.specular);
+	setUniform(name + ".shininess", m.shininess);
+}
+
+void Shader::setUniform(const std::string& name, const Light& l)const
+{
+	setUniform(name + ".position", l.position);
+	setUniform(name + ".ambient", l.ambient);
+	setUniform(name + ".diffuse", l.diffuse);
+	setUniform(name + ".specular", l.specular);
+}
+
 int Shader::getLocation(const std::string& name)const
 {
-	return glGetUniformLocation(m_Id, name.c_str());
+	const int loc = glGetUniformLocation(m_Id, name.c_str());
+	logger::error(loc == -1, "such shader location dont exist {}", name);
+	return loc;
 }

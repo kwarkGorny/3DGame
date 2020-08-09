@@ -3,7 +3,7 @@
 #include <spdlog/fmt/fmt.h>
 
 
-#ifdef DEVELOPMENT
+#ifdef DEVELOPMENT 
 #define ONLY_DEBUG(x) x;
 #else
 #define ONLY_DEBUG(x)
@@ -28,11 +28,11 @@ namespace logger
 	void error([[maybe_unused]] Args&&... args) noexcept { ONLY_DEBUG(error(fmt::format(std::forward<Args>(args)...).c_str())) }
 
 	template<class... Args>
-	void info([[maybe_unused]] bool success, [[maybe_unused]] Args&&... args) noexcept { ONLY_DEBUG(if (!success) { info(std::forward<Args>(args)...); }) }
+	void info([[maybe_unused]] bool isInfo, [[maybe_unused]] Args&&... args) noexcept { ONLY_DEBUG(if (isInfo) { info(std::forward<Args>(args)...); }) }
 
 	template<class... Args>
-	void warning([[maybe_unused]] bool success, [[maybe_unused]] Args&&... args) noexcept { ONLY_DEBUG(if (!success) { warning(std::forward<Args>(args)...); }) }
+	void warning([[maybe_unused]] bool isWarning, [[maybe_unused]] Args&&... args) noexcept { ONLY_DEBUG(if (isWarning) { warning(std::forward<Args>(args)...); }) }
 
 	template<class... Args>
-	void error([[maybe_unused]] bool success, [[maybe_unused]] Args&&... args) noexcept { ONLY_DEBUG(if (!success) { error(std::forward<Args>(args)...); }) }
+	void error([[maybe_unused]] bool isError, [[maybe_unused]] Args&&... args) noexcept { ONLY_DEBUG(if (isError) { error(std::forward<Args>(args)...); }) }
 }

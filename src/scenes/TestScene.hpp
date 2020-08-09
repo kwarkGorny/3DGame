@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scenes/IScene.hpp"
+#include "opengl/Mesh.hpp"
 
 #include <entt/entity/registry.hpp>
 

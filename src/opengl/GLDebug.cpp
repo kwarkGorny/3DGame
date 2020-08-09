@@ -1,8 +1,8 @@
 #include "GLDebug.hpp"
 
-#include <gl/glew.h>
+#ifdef DEVELOPMENT 
+#include "basic/Logger.hpp"
 #include <cassert>
-#include <iostream>
 
 void clearGLErrors()
 {
@@ -17,8 +17,9 @@ void checkGLErrors()
 	auto error = glGetError();
 	while (error != GL_NO_ERROR)
 	{
-		std::cout << "[OPENGL ERROR] code: " << error << '\n';
+		logger::error("OPENGL code:", error);
 		assert(false);
 		error = glGetError();
 	}
 }
+#endif

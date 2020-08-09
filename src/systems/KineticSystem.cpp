@@ -13,12 +13,14 @@ namespace KineticSystem
 {
 	void update(entt::registry& registry, Fseconds dt)
 	{
+		const auto dtCount = dt.count();
 		const auto entities = registry.view<Kinetic, Transform>();
 		for (const auto entity : entities)
 		{
 			auto& t = entities.get<Transform>(entity);
 			const auto& k = entities.get<Kinetic>(entity);
-			t.transform = glm::translate(t.transform, k.velocity * dt.count());
+			t.position += k.velocity * dtCount;
+			t.rotation += k.omega * dtCount;
 		}
 	}
 }

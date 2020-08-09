@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 class Texture
 {
@@ -20,3 +21,5 @@ private:
 	int m_Height = 0;
 	int m_BPP = 0;
 };
+
+using SharedTexture = std::shared_ptr<Texture>;

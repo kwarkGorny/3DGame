@@ -3,15 +3,46 @@
 #include "GLDebug.hpp"
 #include <gl/glew.h>
 
-void Renderer::clear()
+void Renderer::initialize()
 {
-	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT));
+	CHECK_GL(glEnable(GL_DEPTH_TEST));
+
+	CHECK_GL(glEnable(GL_BLEND));
+	CHECK_GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+	//CHECK_GL(glEnable(GL_CULL_FACE));
+	//CHECK_GL(glCullFace(GL_BACK));
+	//CHECK_GL(glFrontFace(GL_CCW));
+
+	CHECK_GL(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)); // GL_LINE / GL_FILL
 }
 
-void Renderer::draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader)
+void Renderer::clear()
+{
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+}
+
+void Renderer::draw(const Mesh& mesh)
+{
+	mesh.bind();
+	if (mesh.indicesCount == 0)
+	{
+		CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, mesh.verticesCount));
+	}
+	else
+	{
+		CHECK_GL(glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_INT, nullptr));
+	}
+}
+
+void Renderer::draw(const Mesh& mesh, const Shader& shader)
 {
 	shader.bind();
-	vertexArray.bind();
-	indexBuffer.bind();
-	CHECK_GL(glDrawElements(GL_TRIANGLES, indexBuffer.getCount(), GL_UNSIGNED_INT, nullptr));
+	draw(mesh);
+}
+
+void Renderer::flush()
+{
+	glFlush();
 }
