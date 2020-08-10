@@ -33,6 +33,7 @@ public:
 
 private:
 	unsigned int m_Id;
+	mutable std::unordered_map<std::string, int> m_LocationsMap;
 };
 
 using SharedShader = std::shared_ptr<Shader>;

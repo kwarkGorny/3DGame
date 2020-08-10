@@ -115,7 +115,13 @@ void Shader::setUniform(const std::string& name, const Light& l)const
 
 int Shader::getLocation(const std::string& name)const
 {
+	const auto itr = m_LocationsMap.find(name);
+	if (itr != m_LocationsMap.end())
+	{
+		return itr->second;
+	}
 	const int loc = glGetUniformLocation(m_Id, name.c_str());
 	logger::error(loc == -1, "such shader location dont exist {}", name);
+	m_LocationsMap.emplace(name, loc);
 	return loc;
 }
