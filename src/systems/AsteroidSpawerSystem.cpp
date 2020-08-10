@@ -15,11 +15,9 @@ namespace AsteroidSpawnerSystem
 		for (const auto entity : spawners)
 		{
 			auto& spawner = spawners.get(entity);
-			spawner.dt += dt;
-			if (spawner.dt >= spawner.spawnInterval)
+			if (spawner.timer.update(dt))
 			{
 				createAsteroid(registry);
-				spawner.dt -= spawner.spawnInterval;
 			}
 		}
 	}
