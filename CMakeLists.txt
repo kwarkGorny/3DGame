@@ -48,6 +48,7 @@ list(APPEND libs PUBLIC
     GLEW::GLEW
     SDL2::Main
     opengl32
+    LuaLib
 )
 
 add_subdirectory(${EXTERNAL_LOCATION}/lua)
