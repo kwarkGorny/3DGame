@@ -6,6 +6,7 @@
 #include "systems/ObsoleteSystem.hpp"
 #include "systems/PlayerSystem.hpp"
 #include "systems/Render3DSystem.hpp"
+#include "systems/WeaponSystem.hpp"
 
 #include "utils/EntitiesUtils.hpp"
 
@@ -27,6 +28,7 @@ bool TestScene::update(Fseconds dt) noexcept
 	KineticSystem::update(m_Registry, dt);
 
 	AsteroidSpawnerSystem::update(m_Registry, dt);
+	WeaponSystem::update(m_Registry, dt);
 
 	ObsoleteSystem::update(m_Registry);
 	return false;
