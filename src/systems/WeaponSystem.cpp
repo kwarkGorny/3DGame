@@ -1,5 +1,3 @@
-#pragma once
-
 #include "components/Transform.hpp"
 #include "components/Kinetic.hpp"
 #include "components/Weapon.hpp"

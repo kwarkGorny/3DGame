@@ -1,5 +1,3 @@
-#pragma once
-
 #include "components/Obsolete.hpp"
 
 #include <entt/entity/registry.hpp>
