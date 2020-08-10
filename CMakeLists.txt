@@ -50,6 +50,8 @@ list(APPEND libs PUBLIC
     opengl32
 )
 
+add_subdirectory(${EXTERNAL_LOCATION}/lua)
+
 list(APPEND includes PUBLIC
     "${sources_folder}/"
     ${EXTERNAL_LOCATION}/glm/
@@ -57,6 +59,8 @@ list(APPEND includes PUBLIC
     ${EXTERNAL_LOCATION}/tinyobjloader/src/
     ${EXTERNAL_LOCATION}/spdlog/include/
     ${EXTERNAL_LOCATION}/entt/src/
+    ${EXTERNAL_LOCATION}/sol/include/
+    ${EXTERNAL_LOCATION}/lua/src/
     ${GLEW_INCLUDE_DIRS}
 )
 
@@ -74,9 +78,14 @@ list(APPEND GLM_DEFINITIONS
     -DGLM_ENABLE_EXPERIMENTAL
 )
 
+list(APPEND SOL_DEFINITIONS 
+    -DSOL_NO_EXCEPTIONS
+    -DSOL_NO_RTTI
+)
+
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEVELOPMENT -DLOGGER")
 
-add_definitions(${GLEW_DEFINITIONS} ${STB_DEFINITIONS} ${WIN_DEFINITIONS} ${GLM_DEFINITIONS})
+add_definitions(${GLEW_DEFINITIONS} ${STB_DEFINITIONS} ${WIN_DEFINITIONS} ${GLM_DEFINITIONS} ${SOL_DEFINITIONS})
 
 add_executable (${PROJECT_NAME} ${sources})
 
