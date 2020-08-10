@@ -1,9 +1,9 @@
 #include "Logger.hpp"
 
-#ifdef LOGGER
+#ifdef DEVELOPMENT
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
-#endif // LOGGER
+#endif // DEVELOPMENT
 
 
 namespace logger
