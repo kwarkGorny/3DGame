@@ -31,7 +31,7 @@ namespace Render3DSystem
 			shader.setUniform("u_Texture", 0);
 			//shader.setUniform("u_Material", renderable.material);
 			//shader.setUniform("u_Light", light);
-			shader.setUniform("u_Model", t.toModelView());
+			shader.setUniform("u_Model", t.toModelMatrix());
 			shader.setUniform("u_View", renderData.view);
 			shader.setUniform("u_Projection", renderData.projection);
 			//shader.setUniform("u_CameraPos", camPos);

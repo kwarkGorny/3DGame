@@ -10,7 +10,7 @@ struct Transform
 	glm::vec3 rotation = glm::vec3(0.f);
 	glm::vec3 scale = glm::vec3(1.f);
 
-	inline glm::mat4 toModelView()const 
+	inline glm::mat4 toModelMatrix()const 
 	{
 		glm::mat4 model(1.f);
 		model = glm::translate(model, position);
