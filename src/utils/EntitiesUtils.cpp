@@ -91,6 +91,11 @@ void createPlayer(entt::registry& registry)
 	renderable.material = { {1.0f, 0.5f, 0.31f}, {1.0f, 0.5f, 0.31f}, {0.5f, 0.5f, 0.5f}, 32.0f };
 }
 
+void createBullet(entt::registry& registry)
+{
+    logger::info("Bullet created placeholder");
+}
+
 void createAsteroid(entt::registry& registry)
 {
     logger::info("Asteroid created placeholder");
