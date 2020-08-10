@@ -3,6 +3,7 @@
 #include "systems/AsteroidSpawerSystem.hpp"
 #include "systems/DynamicSystem.hpp"
 #include "systems/KineticSystem.hpp"
+#include "systems/ObsoleteSystem.hpp"
 #include "systems/PlayerSystem.hpp"
 #include "systems/Render3DSystem.hpp"
 
@@ -26,6 +27,8 @@ bool TestScene::update(Fseconds dt) noexcept
 	KineticSystem::update(m_Registry, dt);
 
 	AsteroidSpawnerSystem::update(m_Registry, dt);
+
+	ObsoleteSystem::update(m_Registry);
 	return false;
 }
 
