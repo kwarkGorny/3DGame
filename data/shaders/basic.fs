@@ -22,14 +22,13 @@ in vec2 v_TexCoord;
 
 layout(location = 0) out vec4 color;
 
+uniform sampler2D u_Texture;
 uniform Material u_Material;
 uniform Light u_Light;
-uniform sampler2D u_Texture;
 uniform vec3 u_CameraPos;
 
 void main()
 {	
-	//vec4 objColor = vec4(11.0f, 0.5f, 0.31f, 1.0f);
 	//ambient light
     vec3 ambient = u_Light.ambient * u_Material.ambient;
 
@@ -46,7 +45,6 @@ void main()
     vec3 specular = u_Light.specular * (spec * u_Material.specular);  
 	
 	vec3 result = (ambient + diffuse + specular);
-	//color = vec4(result, 1.0) * objColor;
-	color = texture(u_Texture, v_TexCoord);
+	color = vec4(result, 1.0) * texture(u_Texture, v_TexCoord);
 }
  

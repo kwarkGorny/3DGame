@@ -10,11 +10,11 @@ void Renderer::initialize()
 	CHECK_GL(glEnable(GL_BLEND));
 	CHECK_GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-	//CHECK_GL(glEnable(GL_CULL_FACE));
-	//CHECK_GL(glCullFace(GL_BACK));
-	//CHECK_GL(glFrontFace(GL_CCW));
+	CHECK_GL(glEnable(GL_CULL_FACE));
+	CHECK_GL(glCullFace(GL_BACK));
+	CHECK_GL(glFrontFace(GL_CCW));
 
-	CHECK_GL(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)); // GL_LINE / GL_FILL
+	CHECK_GL(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)); // GL_LINE // GL_FILL
 }
 
 void Renderer::clear()
@@ -26,14 +26,7 @@ void Renderer::clear()
 void Renderer::draw(const Mesh& mesh)
 {
 	mesh.bind();
-	if (mesh.indicesCount == 0)
-	{
-		CHECK_GL(glDrawArrays(GL_TRIANGLES, 0, mesh.verticesCount));
-	}
-	else
-	{
-		CHECK_GL(glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_INT, nullptr));
-	}
+	CHECK_GL(glDrawElements(GL_TRIANGLES, mesh.indicesCount, GL_UNSIGNED_INT, nullptr));
 }
 
 void Renderer::draw(const Mesh& mesh, const Shader& shader)

@@ -10,6 +10,7 @@
 #include "components/Player.hpp"
 #include "components/Renderable3D.hpp"
 #include "components/Transform.hpp"
+#include "components/Weapon.hpp"
 
 #include "opengl/Mesh.hpp"
 
@@ -17,51 +18,6 @@
 
 #include <entt/entity/registry.hpp>
 
-
-std::vector<Vertex> vertices = {
-        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
-        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
-        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
-        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
-        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f,  0.0f, -1.0f) },
-
-        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
-        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
-        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
-        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
-        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
-        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f,  0.0f,  1.0f) },
-
-        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
-        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
-        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
-        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0f,  0.0f,  0.0f) },
-
-        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
-        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
-        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
-        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
-        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
-        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0f,  0.0f,  0.0f) },
-
-        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
-        { glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
-        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
-        { glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
-        { glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
-        { glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.0f, -1.0f,  0.0f) },
-
-        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f) },
-        { glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f) },
-        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f) },
-        { glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f) },
-        { glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0.0f,  1.0f,  0.0f) },
-        { glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0.0f,  1.0f,  0.0f) }
-};
-std::vector<unsigned int> indices = {};
 /*
 std::vector<Vertex> vertices = {
     { glm::vec3(-0.5f, 0.5f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec2(0.f, 1.f) },
@@ -76,33 +32,60 @@ std::vector<unsigned int> indices = {
 };
 */
 
-void createPlayer(entt::registry& registry)
+void createPlayer(entt::registry& registry, const PlayerShipData& shipData)
 {
 	const auto test = registry.create();
-	registry.emplace<Transform>(test);
-	registry.emplace<Kinetic>(test);
-	registry.emplace<Player>(test);
+	registry.emplace<Transform>(test, glm::vec3( 0, -12, -10.f), glm::vec3(0.f, 1.5f * glm::pi<float>(), 0.f), glm::vec3(1.f, 1.f, 1.f));
+    registry.emplace<Kinetic>(test);
+    registry.emplace<Dynamic>(test, Dynamic{ glm::vec3{}, shipData.shipMass });
+    registry.emplace<Player>(test, shipData.manoeuveringEnginesThrust);
+    registry.emplace<Weapon>(test, Weapon{ Timer{ shipData.shootingFrequency }, glm::vec3{}, shipData.bulletsVelocity });
 
 	auto& renderable = registry.emplace<Renderable3D>(test);
-	//renderable.mesh = std::make_shared<Mesh>(MeshCPU(vertices, indices));
 	renderable.mesh = g_MeshAdmin["data/obj/ship/ship.obj"];
-	renderable.texture = g_TextureAdmin["data/textures/teapot.png"];
+	renderable.texture = g_TextureAdmin["data/obj/ship/ship.png"];
 	renderable.shader = g_ShaderAdmin["data/shaders/basic"];
 	renderable.material = { {1.0f, 0.5f, 0.31f}, {1.0f, 0.5f, 0.31f}, {0.5f, 0.5f, 0.5f}, 32.0f };
 }
 
 void createBullet(entt::registry& registry)
 {
-    logger::info("Bullet created placeholder");
+    const auto bullet = registry.create();
+    registry.emplace<Transform>(bullet, Transform{ glm::vec3(0, 0, -10.f) });
+    registry.emplace<Kinetic>(bullet);
+    auto& renderable = registry.emplace<Renderable3D>(bullet);
+    renderable.mesh = g_MeshAdmin["data/obj/bullet/bullet.obj"];
+    renderable.texture = g_TextureAdmin["data/obj/bullet/bullet.png"];
+    renderable.shader = g_ShaderAdmin["data/shaders/basic"];
+    renderable.material = { {1.0f, 0.5f, 0.31f}, {1.0f, 0.5f, 0.31f}, {0.5f, 0.5f, 0.5f}, 32.0f };
 }
 
-void createAsteroid(entt::registry& registry)
+void createAsteroid(entt::registry& registry, int id, glm::vec2 position, glm::vec3 omega)
 {
-    logger::info("Asteroid created placeholder");
+    const auto asteroid = registry.create();
+    registry.emplace<Transform>(asteroid, Transform{ glm::vec3(position.x, position.y, -10.f) });
+    registry.emplace<Kinetic>(asteroid, Kinetic{ {0, -5, 0}, omega });
+    auto& renderable = registry.emplace<Renderable3D>(asteroid);
+    const std::string asteroidId = "asteroid" + std::to_string(id);
+    renderable.mesh = g_MeshAdmin[fmt::format("data/obj/{0}/{0}.obj", asteroidId)];
+    renderable.texture = g_TextureAdmin[fmt::format("data/obj/{0}/{0}.png", asteroidId)];
+    renderable.shader = g_ShaderAdmin["data/shaders/basic"];
+    renderable.material = { {1.0f, 0.5f, 0.31f}, {1.0f, 0.5f, 0.31f}, {0.5f, 0.5f, 0.5f}, 32.0f };
 }
 
-void createAsteroidSpawner(entt::registry& registry)
+void createAsteroidSpawner(entt::registry& registry, const AsteroidSpawnerData& spawnerData)
 {
     const auto test = registry.create();
-    registry.emplace<AsteroidSpawner>(test);
+    registry.emplace<AsteroidSpawner>(test, AsteroidSpawner{ 
+        Timer{ Fseconds(spawnerData.asteroidFrequency)},
+        spawnerData.asteroidFrequency,
+        spawnerData.asteroidFrequencyIncrease,
+        spawnerData.omegaRange
+    });
+}
+
+void createBackground(entt::registry& registry, float playerForwardVelocity)
+{
+    logger::info("Background created placeholder");
+
 }

@@ -8,11 +8,13 @@
 #include <glm/vec2.hpp>
 #include <glm/gtx/hash.hpp>
 
+#include "Material.hpp"
+
 struct Vertex 
 {
     glm::vec3 position;
     glm::vec3 normal;
-    glm::vec2 texCoords = glm::vec2(0.f, 0.f);
+    glm::vec2 texCoords;
 
     bool operator==(const Vertex& other) const {
         return position == other.position && normal == other.normal && texCoords == other.texCoords;
@@ -40,7 +42,8 @@ struct MeshCPU
 
 
     std::vector<Vertex> vertices;
-    std::vector<std::uint32_t> indices;
+    std::vector<unsigned int> indices;
+    //Material material;
 };
 
 struct Mesh
@@ -54,8 +57,8 @@ struct Mesh
     const unsigned int vertexArrayId;
     const unsigned int vertexBufferId;
     const unsigned int indicesId;
-    const uint32_t indicesCount;
-    const uint32_t verticesCount;
+    const unsigned int indicesCount;
+    //Material material;
 };
 
 using SharedMesh = std::shared_ptr<Mesh>;
