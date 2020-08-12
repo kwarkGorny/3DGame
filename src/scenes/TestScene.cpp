@@ -1,5 +1,6 @@
 #include "TestScene.hpp"
 
+#include "contexts/Camera.hpp"
 #include "contexts/SceneSize.hpp"
 
 #include "systems/AsteroidSpawerSystem.hpp"
@@ -61,22 +62,7 @@ bool TestScene::update(Fseconds dt) noexcept
 
 bool TestScene::draw() noexcept
 {
-	float fov = glm::radians(60.f);
-	float nearPlane = 0.3f;
-	float farPlane = 1000.f;
-	glm::ivec2 size = { 1920, 1080 };
-	//glm::mat4 projection = glm::ortho(0, size.x, 0, size.y);
-	glm::mat4 projection = glm::perspective(fov, static_cast<float>(size.x) / static_cast<float>(size.y), nearPlane, farPlane);
-
-	glm::vec3 camPos(0.f, 0.f, 10.f);
-	//glm::mat4 view = glm::mat4(1.f);
-	glm::mat4 view = glm::lookAt(camPos, camPos + glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
-	RenderData data = {
-		projection,
-		view
-	};
-
-	Render3DSystem::draw(m_Registry, data);
+	Render3DSystem::draw(m_Registry);
 	return false;
 }
 
