@@ -39,7 +39,7 @@ void createPlayer(entt::registry& registry, const PlayerShipData& shipData)
     registry.emplace<Kinetic>(test);
     registry.emplace<Dynamic>(test, Dynamic{ glm::vec3{}, shipData.shipMass });
     registry.emplace<Player>(test, shipData.manoeuveringEnginesThrust);
-    registry.emplace<Weapon>(test, Weapon{ Timer{ shipData.shootingFrequency }, glm::vec3{}, shipData.bulletsVelocity });
+    //registry.emplace<Weapon>(test, Weapon{ Timer{ shipData.shootingFrequency }, glm::vec3{}, shipData.bulletsVelocity });
 
 	auto& renderable = registry.emplace<Renderable3D>(test);
 	renderable.mesh = g_MeshAdmin["data/obj/ship/ship.obj"];

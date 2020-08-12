@@ -1,7 +1,6 @@
 #include "Application.hpp"
 
 #include "admins/InputAdmin.hpp"
-
 #include "basic/Logger.hpp"
 #include "opengl/GLDebug.hpp"
 #include "opengl/Renderer.hpp"
