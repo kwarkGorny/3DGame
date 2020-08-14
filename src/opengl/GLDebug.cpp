@@ -17,7 +17,7 @@ void checkGLErrors()
 	auto error = glGetError();
 	while (error != GL_NO_ERROR)
 	{
-		logger::error("OPENGL code:", error);
+		logger::error("OPENGL code:{}", error);
 		assert(false);
 		error = glGetError();
 	}

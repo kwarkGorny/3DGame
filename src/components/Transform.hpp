@@ -4,6 +4,12 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+struct PositionConstrain
+{
+	glm::vec3 maxPosition;
+	glm::vec3 minPosition;
+};
+
 struct Transform
 {
 	glm::vec3 position = glm::vec3(0.f);

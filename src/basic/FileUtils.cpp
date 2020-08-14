@@ -2,11 +2,14 @@
 
 #include <fstream>
 
+#include "basic/Logger.hpp"
+
 std::string loadFile(const std::string& filePath)
 {
 	std::ifstream t(filePath);
 	if (!t.is_open())
 	{
+		logger::error("such file dont exist " + filePath );
 		return "";
 	}
 	t.seekg(0, std::ios::end);

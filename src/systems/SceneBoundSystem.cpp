@@ -1,10 +1,12 @@
 #include "SceneBoundSystem.hpp"
 
+#include "basic/Logger.hpp"
+
 #include "components/Transform.hpp"
-#include "components/SceneBound.hpp"
+#include "components/Bounded.hpp"
 #include "components/Obsolete.hpp"
 
-#include "contexts/SceneSize.hpp"
+#include "contexts/SceneBound.hpp"
 
 #include <entt/entity/registry.hpp>
 
@@ -12,20 +14,21 @@ namespace SceneBoundSystem
 {
 	void update(entt::registry& registry)
 	{
-		const auto sceneSizePtr = registry.try_ctx<SceneSize>();
-		if(!sceneSizePtr)
+		const auto sceneBoundPtr = registry.try_ctx<SceneBound>();
+		if(!sceneBoundPtr)
 		{
 			return;
 		}
-		const auto& size = sceneSizePtr->size;
-		const auto view = registry.view<SceneBound, Transform>();
+		const auto& bound = *sceneBoundPtr;
+		const auto view = registry.view<Bounded, Transform>();
 		for (const auto entity : view)
 		{
 			const auto& position = view.get<Transform>(entity).position;
-			if (position.x < 0 || position.x > size.x ||
-				position.y < 0 || position.y > size.y)
+			if (position.x < bound.start.x || position.x > bound.end.x ||
+				position.y < bound.start.y || position.y > bound.end.y)
 			{
 				registry.emplace<Obsolete>(entity);
+				logger::info("entity outside of scene bound removed: {}", entity);
 			}
 		}
 	}

@@ -12,13 +12,15 @@ namespace WeaponSystem
 {
 	void update(entt::registry& registry, Fseconds dt)
 	{
-		const auto weaponsView = registry.view<Weapon>();
+		const auto weaponsView = registry.view<Weapon, Transform>();
 		for (const auto entity : weaponsView)
 		{
-			auto& weapon = weaponsView.get(entity);
+			auto& weapon = weaponsView.get<Weapon>(entity);
 			if (weapon.timer.update(dt))
 			{
-				createBullet(registry);
+				auto transform = weaponsView.get<Transform>(entity);
+				transform.position += weapon.offset;
+				createBullet(registry, transform, { glm::vec3(0.f, weapon.bulletVelocity, 0.f) });
 			}
 		}
 	}

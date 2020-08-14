@@ -4,8 +4,10 @@
 #include "components/Transform.hpp"
 
 #include "contexts/Camera.hpp"
+#include "contexts/SceneFrameBuffer.hpp"
 
 #include "opengl/Renderer.hpp"
+#include "opengl/Light.hpp"
 
 #include <entt/entity/registry.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -20,13 +22,17 @@ namespace Render3DSystem
 			return;
 		}
 		const auto& camera = *cameraPtr;
+		const auto& sceneBuffer = registry.ctx<SceneFrameBuffer>();
+		sceneBuffer.framebuffer->bind();
+		Renderer::clear();
 
 		Light light = {
-			glm::vec3{0.f, 0.f, 10.f},
+			glm::vec3{1.f,-1.f, 1.f},
 			glm::vec3{1.f, 1.f, 1.f}, //ambient
 			glm::vec3{1.f, 1.f, 1.f}, //diffuse
 			glm::vec3{1.0f, 1.0f, 1.0f}  //specular
 		};
+
 
 		const auto entities = registry.group<Renderable3D, Transform>();
 		for (const auto entity : entities)
@@ -36,7 +42,6 @@ namespace Render3DSystem
 			const auto& shader = *renderable.shader;
 			renderable.texture->bind();
 			shader.bind();
-			shader.setUniform("u_Texture", 0);
 			shader.setUniform("u_Material", renderable.material);
 			shader.setUniform("u_Light", light);
 			shader.setUniform("u_Model", t.toModelMatrix());
@@ -46,5 +51,11 @@ namespace Render3DSystem
 			
 			Renderer::draw(*renderable.mesh);
 		}
+		sceneBuffer.framebuffer->unbind();
+		sceneBuffer.shader->bind();
+
+		sceneBuffer.framebuffer->bindTexture();
+		glBindVertexArray(sceneBuffer.framebuffer->m_VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 }

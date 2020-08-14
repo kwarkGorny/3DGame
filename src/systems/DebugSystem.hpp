@@ -2,7 +2,7 @@
 
 #include <entt/entity/fwd.hpp>
 
-namespace PlayerSystem
+namespace DebugSystem
 {
 	void update(entt::registry& registry);
 }

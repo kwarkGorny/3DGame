@@ -7,6 +7,7 @@
 #include <unordered_map>
 
 #include "Material.hpp"
+#include "Light.hpp"
 
 class Shader
 {

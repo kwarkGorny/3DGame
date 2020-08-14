@@ -1,11 +1,10 @@
-#include "KineticSystem.hpp"
+#include "PlayerSystem.hpp"
 
 #include "admins/InputAdmin.hpp"
 
 #include "components/Dynamic.hpp"
 #include "components/Player.hpp"
 
-#include <SDL_events.h>
 #include <entt/entity/registry.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 

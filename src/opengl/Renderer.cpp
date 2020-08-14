@@ -14,13 +14,16 @@ void Renderer::initialize()
 	CHECK_GL(glCullFace(GL_BACK));
 	CHECK_GL(glFrontFace(GL_CCW));
 
+	CHECK_GL(glEnable(GL_STENCIL_TEST));
+	CHECK_GL(glStencilFunc(GL_EQUAL, 1, 0xFF));
+
 	CHECK_GL(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)); // GL_LINE // GL_FILL
 }
 
 void Renderer::clear()
 {
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+	CHECK_GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
 }
 
 void Renderer::draw(const Mesh& mesh)

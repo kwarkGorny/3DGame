@@ -107,7 +107,7 @@ void Shader::setUniform(const std::string& name, const Material& m)const
 
 void Shader::setUniform(const std::string& name, const Light& l)const
 {
-	setUniform(name + ".position", l.position);
+	setUniform(name + ".direction", l.direction);
 	setUniform(name + ".ambient", l.ambient);
 	setUniform(name + ".diffuse", l.diffuse);
 	setUniform(name + ".specular", l.specular);
