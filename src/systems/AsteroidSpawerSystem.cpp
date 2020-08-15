@@ -1,5 +1,7 @@
 #include "KineticSystem.hpp"
 
+#include "basic/Logger.hpp"
+
 #include "admins/RandomAdmin.hpp"
 
 #include "components/AsteroidSpawner.hpp"
@@ -31,8 +33,9 @@ namespace AsteroidSpawnerSystem
 			}
 			spawner.asteroidFrequency += spawner.asteroidFrequencyIncrease;
 			spawner.timer.duration = Fseconds(1 / spawner.asteroidFrequency);
-			const auto randomOmega = g_RandomAdmin.getDirection() * g_RandomAdmin.getUniform(spawner.omegaRange);
-			const glm::vec3 randomPosition = { g_RandomAdmin.getUniform(sceneBound.start.x, sceneBound.end.x), sceneBound.start.y, 0.f };
+			logger::info("current asteroids spawn frequency {}, increase {}, delay {}", spawner.asteroidFrequency, spawner.asteroidFrequencyIncrease, spawner.timer.duration.count());
+			const glm::vec3 randomOmega = g_RandomAdmin.getDirection() * g_RandomAdmin.getUniform(spawner.omegaRange);
+			const glm::vec3 randomPosition = { g_RandomAdmin.getUniform(sceneBound.start.x, sceneBound.end.x), sceneBound.end.y, 0.f };
 			createAsteroid(registry, g_RandomAdmin.getUniform(1, 3), randomPosition, randomOmega);
 		}
 	}

@@ -2,9 +2,19 @@
 
 #include "GLDebug.hpp"
 #include <gl/glew.h>
+#include <stb/stb_image.h>
+namespace
+{
+	unsigned int g_QuadVA;
+	unsigned int g_QuadVB;
+	unsigned int g_QuadVI;
+
+}
 
 void Renderer::initialize()
 {
+	stbi_set_flip_vertically_on_load(1);
+
 	CHECK_GL(glEnable(GL_DEPTH_TEST));
 
 	CHECK_GL(glEnable(GL_BLEND));
@@ -36,6 +46,16 @@ void Renderer::draw(const Mesh& mesh, const Shader& shader)
 {
 	shader.bind();
 	draw(mesh);
+}
+
+void Renderer::drawQuad(const glm::vec4& position, const glm::vec4& size, const glm::vec4& color)
+{
+
+}
+
+void Renderer::drawQuad(const glm::vec4& position, const glm::vec4& size, unsigned int textureId)
+{
+
 }
 
 void Renderer::flush()

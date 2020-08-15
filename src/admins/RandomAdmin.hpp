@@ -12,7 +12,7 @@ class RandomAdmin
 public:
 	glm::vec3 getDirection()
 	{
-		std::uniform_real_distribution<float> zRandomizer(-1.f, -1.f);
+		std::uniform_real_distribution<float> zRandomizer(-1.f, 1.f);
 		std::uniform_real_distribution<float> thetaRandomizer(0, 2 * glm::pi<float>());
 		const float theta = thetaRandomizer(m_Generator);
 		const float z = zRandomizer(m_Generator);

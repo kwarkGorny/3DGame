@@ -1,6 +1,10 @@
 #include "Application.hpp"
 
 #include "admins/InputAdmin.hpp"
+#include "admins/MeshAdmin.hpp"
+#include "admins/ShaderAdmin.hpp"
+#include "admins/TextureAdmin.hpp"
+
 #include "basic/Logger.hpp"
 #include "opengl/GLDebug.hpp"
 #include "opengl/Renderer.hpp"
@@ -119,4 +123,8 @@ void Application::run(Fseconds fps, Fseconds maxDelay, Fseconds slowWarring)noex
 
 		std::this_thread::sleep_for(fps - dtFrame);
 	}
+	m_Scenes.clear();
+	g_MeshAdmin.clear();
+	g_ShaderAdmin.clear();
+	g_TextureAdmin.clear();
 }

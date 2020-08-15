@@ -50,3 +50,4 @@ void createAsteroidSpawner(entt::registry& registry, const AsteroidSpawnerData& 
 void createBackground(entt::registry& registry, float playerForwardVelocity);
 
 void createExplosion(entt::registry& registry, Transform transform);
+

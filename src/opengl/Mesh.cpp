@@ -67,7 +67,7 @@ MeshCPU::MeshCPU(const std::string& objfilePath, const std::string& mtlDirPath)
         //m.diffuseTexture = material.diffuse_texname;
         //m.specularTexture = material.specular_texname;
         //m.specularHighlightTexture = material.specular_highlight_texname;
-        printTinyObjMaterial(material);
+        //printTinyObjMaterial(material);
     }
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};

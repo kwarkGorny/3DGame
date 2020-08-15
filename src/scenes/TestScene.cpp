@@ -13,9 +13,12 @@
 #include "systems/DynamicSystem.hpp"
 #include "systems/KineticSystem.hpp"
 #include "systems/ObsoleteSystem.hpp"
+#include "systems/ParticleSystem.hpp"
 #include "systems/PlayerSystem.hpp"
 #include "systems/Render3DSystem.hpp"
 #include "systems/SceneBoundSystem.hpp"
+#include "systems/SceneFrameBufferSystem.hpp"
+#include "systems/SkyboxSystem.hpp"
 #include "systems/WeaponSystem.hpp"
 
 
@@ -47,7 +50,7 @@ TestScene::TestScene()
 	frameBufferShader->setUniform("u_Texture", 0);
 	m_Registry.set<SceneBound>(glm::vec2(-50, -50), glm::vec2(50, 50));
 	m_Registry.set<SceneFrameBuffer>(
-		std::make_unique<FrameBuffer>(1920, 1080),
+		std::make_unique<FrameBuffer>(size.x, size.y),
 		frameBufferShader
 	);
 
@@ -58,8 +61,9 @@ TestScene::TestScene()
 	
 	createResourcesCache(m_Registry);
 	createPlayer(m_Registry, PlayerShipData{ levelConfig });
-	//createAsteroidSpawner(m_Registry, AsteroidSpawnerData{ levelConfig });
-	//createBackground(m_Registry, shipforwardVelocity);
+	createAsteroidSpawner(m_Registry, AsteroidSpawnerData{ levelConfig });
+	createBackground(m_Registry, shipforwardVelocity);
+	//createExplosion(m_Registry, {});
 }
 
 bool TestScene::update(Fseconds dt) noexcept
@@ -74,6 +78,8 @@ bool TestScene::update(Fseconds dt) noexcept
 	SceneBoundSystem::update(m_Registry);
 	CollisionSystem::update(m_Registry);
 
+	ParticleSystem::update(m_Registry, dt);
+
 	ObsoleteSystem::update(m_Registry);
 
 #ifdef DEVELOPMENT
@@ -85,7 +91,11 @@ bool TestScene::update(Fseconds dt) noexcept
 
 bool TestScene::draw() noexcept
 {
+	SceneFrameBufferSystem::predraw(m_Registry);
+	SkyboxSystem::draw(m_Registry);
 	Render3DSystem::draw(m_Registry);
+	ParticleSystem::draw(m_Registry);
+	SceneFrameBufferSystem::postdraw(m_Registry);
 	return false;
 }
 

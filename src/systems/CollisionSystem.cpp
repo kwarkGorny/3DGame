@@ -57,8 +57,8 @@ namespace CollisionSystem
 
 			for (const auto player : players)
 			{
-				const auto& playerPos = bullets.get<Transform>(player).position;
-				const auto& playerCollider = bullets.get<RectCollider>(player);
+				const auto& playerPos = players.get<Transform>(player).position;
+				const auto& playerCollider = players.get<RectCollider>(player);
 				if (isCollidingABBA(playerPos, playerCollider, asteroidPos, asteroidCollider))
 				{
 					logger::info("asteroid bullet player");

@@ -10,5 +10,5 @@ struct AsteroidSpawner
 	Timer timer;
 	float asteroidFrequency = 1;
 	float asteroidFrequencyIncrease = 1;
-	glm::vec2 omegaRange = { glm::pi<float>(), glm::pi<float>() };
+	glm::vec2 omegaRange = { -glm::pi<float>(), glm::pi<float>() };
 };

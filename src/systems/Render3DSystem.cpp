@@ -4,7 +4,6 @@
 #include "components/Transform.hpp"
 
 #include "contexts/Camera.hpp"
-#include "contexts/SceneFrameBuffer.hpp"
 
 #include "opengl/Renderer.hpp"
 #include "opengl/Light.hpp"
@@ -22,9 +21,6 @@ namespace Render3DSystem
 			return;
 		}
 		const auto& camera = *cameraPtr;
-		const auto& sceneBuffer = registry.ctx<SceneFrameBuffer>();
-		sceneBuffer.framebuffer->bind();
-		Renderer::clear();
 
 		Light light = {
 			glm::vec3{1.f,-1.f, 1.f},
@@ -51,11 +47,5 @@ namespace Render3DSystem
 			
 			Renderer::draw(*renderable.mesh);
 		}
-		sceneBuffer.framebuffer->unbind();
-		sceneBuffer.shader->bind();
-
-		sceneBuffer.framebuffer->bindTexture();
-		glBindVertexArray(sceneBuffer.framebuffer->m_VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 }
