@@ -8,5 +8,5 @@ layout(location = 0) out vec4 color;
 
 void main() 
 {
-	color = texture(u_Texture, gl_PointCoord) * fragColor;
+	color = fragColor;
 }

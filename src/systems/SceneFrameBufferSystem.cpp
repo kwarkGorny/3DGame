@@ -30,7 +30,6 @@ namespace SceneFrameBufferSystem
 		sceneBuffer.framebuffer->unbind();
 		sceneBuffer.shader->bind();
 		sceneBuffer.framebuffer->bindTexture();
-		glBindVertexArray(sceneBuffer.framebuffer->m_VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		Renderer::drawQuad();
 	}
 }

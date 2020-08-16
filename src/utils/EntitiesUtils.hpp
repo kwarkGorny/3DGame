@@ -4,6 +4,7 @@
 
 #include "components/Kinetic.hpp"
 #include "components/Transform.hpp"
+#include "components/Asteroid.hpp"
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -31,23 +32,26 @@ struct AsteroidSpawnerData
 		: asteroidFrequency(table["initialAsteroidAppearanceFrequency"].get_or(1.f))
 		, asteroidFrequencyIncrease(table["asteroidAppearanceFrequencyIncrease"].get_or(1.f))
 		, omegaRange(table["asteroidsAngularVelocityRange"][1].get_or(-glm::pi<float>()), table["asteroidsAngularVelocityRange"][2].get_or(glm::pi<float>()))
+		, prefab{ Fseconds(table["explosionDuration"].get_or(0.1f)) }
 	{}
 	float asteroidFrequency = 1;
 	float asteroidFrequencyIncrease = 1;
 	glm::vec2 omegaRange = { -glm::pi<float>(), glm::pi<float>() };
+	Asteroid prefab;
 };
 
 void createResourcesCache(entt::registry& registry);
 
 void createPlayer(entt::registry& registry, const PlayerShipData& shipData);
 
-void createBullet(entt::registry& registry, Transform transform, Kinetic kinetic);
+void createBullet(entt::registry& registry, glm::vec3 position, Kinetic kinetic);
 
-void createAsteroid(entt::registry& registry, int id, glm::vec3 position, glm::vec3 omega);
+void createAsteroid(entt::registry& registry, int id, glm::vec3 position, glm::vec3 omega, Asteroid prefab);
 
 void createAsteroidSpawner(entt::registry& registry, const AsteroidSpawnerData& spawnerData);
 
 void createBackground(entt::registry& registry, float playerForwardVelocity);
 
-void createExplosion(entt::registry& registry, Transform transform);
+void createAsteroidExplosion(entt::registry& registry, glm::vec3 position, Fseconds explosionDuration);
 
+void createBulletExplosion(entt::registry& registry, glm::vec3 position);

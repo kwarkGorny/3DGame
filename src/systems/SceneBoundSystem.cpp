@@ -28,7 +28,6 @@ namespace SceneBoundSystem
 				position.y < bound.start.y || position.y > bound.end.y)
 			{
 				registry.emplace<Obsolete>(entity);
-				logger::info("entity outside of scene bound removed: {}", entity);
 			}
 		}
 	}

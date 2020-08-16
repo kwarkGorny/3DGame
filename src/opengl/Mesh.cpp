@@ -4,6 +4,8 @@
 #include "GLDebug.hpp"
 
 #include <unordered_map>
+#include <numeric>
+#include <utility>
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tinyobjloader/tiny_obj_loader.h>
@@ -69,6 +71,12 @@ MeshCPU::MeshCPU(const std::string& objfilePath, const std::string& mtlDirPath)
         //m.specularHighlightTexture = material.specular_highlight_texname;
         //printTinyObjMaterial(material);
     }
+    float minX = std::numeric_limits<float>::max();
+    float maxX = std::numeric_limits<float>::min();
+    float minY = std::numeric_limits<float>::max();
+    float maxY = std::numeric_limits<float>::min();
+    float minZ = std::numeric_limits<float>::max();
+    float maxZ = std::numeric_limits<float>::min();
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};
     for (const auto& shape : shapes)
@@ -98,10 +106,17 @@ MeshCPU::MeshCPU(const std::string& objfilePath, const std::string& mtlDirPath)
                         attrib.texcoords[2 * index.texcoord_index + 1]
                     }
                 };
+
                 const auto pair = uniqueVertices.try_emplace(vertex, static_cast<unsigned int>(vertices.size()));
                 if (pair.second)
                 {
                    vertices.push_back(vertex);
+                   minX = std::min(minX, vertex.position.x);
+                   maxX = std::max(maxX, vertex.position.x);
+                   minY = std::min(minY, vertex.position.y);
+                   maxY = std::max(maxY, vertex.position.y);
+                   minZ = std::min(minZ, vertex.position.z);
+                   maxZ = std::max(maxZ, vertex.position.z);
                 }
                 indices.push_back(pair.first->second);
             }
@@ -114,6 +129,10 @@ MeshCPU::MeshCPU(const std::string& objfilePath, const std::string& mtlDirPath)
             //}
         }
     }
+    width = maxX - minX;
+    height = maxY - minY;
+    depth = maxZ - minZ;
+
 }
 
 unsigned int MeshCPU::createIndexBuffer()const
@@ -157,6 +176,9 @@ Mesh::Mesh(const MeshCPU& meshCPU)
     , vertexBufferId(meshCPU.createVertexBuffer())
     , indicesId(meshCPU.createIndexBuffer())
     , indicesCount(meshCPU.indices.size())
+    , width(meshCPU.width)
+    , height(meshCPU.height)
+    , depth(meshCPU.depth)
 //    , material(meshCPU.material)
 {
     meshCPU.setupVertexArray(vertexArrayId, vertexBufferId);

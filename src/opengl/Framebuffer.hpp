@@ -21,8 +21,6 @@ public:
 public:
 	unsigned int m_Id = 0;
 	unsigned int m_TextureId = 0;
-	unsigned int m_VAO;
-	unsigned int m_VBO;
 	int m_Width = 0;
 	int m_Height = 0;
 };

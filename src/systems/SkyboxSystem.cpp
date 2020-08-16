@@ -31,7 +31,6 @@ namespace SkyboxSystem
 			skybox.cubemap->bind();
 			const auto& shader = *skybox.shader;
 			shader.bind();
-			shader.setUniform("u_Skybox", 0);
 			shader.setUniform("u_Model", t.toModelMatrix());
 			shader.setUniform("u_View", view);
 			shader.setUniform("u_Projection", camera.projection);

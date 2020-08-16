@@ -13,7 +13,7 @@
 
 #include "opengl/GLDebug.hpp"
 
-void ParticlesContainer::initialize(const SharedShader& s,const SharedTexture& t, size_t maxSize)
+void ParticlesContainer::initialize(const SharedShader& s, size_t maxSize)
 {
 	if (initialized)
 	{
@@ -21,7 +21,6 @@ void ParticlesContainer::initialize(const SharedShader& s,const SharedTexture& t
 	}
 	initialized = true;
 	shader = s;
-	texture = t;
 	count = maxSize;
 	countAlive = 0;
 
@@ -60,7 +59,6 @@ void ParticlesContainer::deinitialize()
 	}
 	initialized = false;
 	shader = nullptr;
-	texture = nullptr;
 	count = 0;
 	countAlive = 0;
 
@@ -100,7 +98,7 @@ void ParticlesContainer::copyData(std::size_t fromId, std::size_t toId)
 	timers[toId] = timers[fromId];
 }
 
-void BoxPosGen::generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId)
+void PositionGenerator::generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId)
 {
 	glm::vec4 posMin{ position.x - offset.x, position.y - offset.y, position.z - offset.z, 1.0 };
 	glm::vec4 posMax{ position.x + offset.x, position.y + offset.y, position.z + offset.z, 1.0 };
@@ -111,16 +109,7 @@ void BoxPosGen::generate(Fseconds dt, ParticlesContainer& p, size_t startId, siz
 	}
 }
 
-void RoundPositionGenerator::generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId) 
-{
-	for (std::size_t i = startId; i < endId; ++i)
-	{
-		const double ang = glm::linearRand(0.0, glm::pi<double>() * 2.0);
-		p.positions[i] = position + glm::vec3(radius * std::sin(ang), radius * std::cos(ang), 0.0);
-	}
-}
-
-void BasicVelGen::generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId) 
+void VelocityGenerator::generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId) 
 {
 	for (size_t i = startId; i < endId; ++i)
 	{
@@ -128,15 +117,19 @@ void BasicVelGen::generate(Fseconds dt, ParticlesContainer& p, size_t startId, s
 	}
 }
 
-void BasicTimeGen::generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId)
+void TimeGenerator::generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId)
 {
 	for (size_t i = startId; i < endId; ++i)
 	{
-		p.timers[i].duration = Fseconds(glm::linearRand(minTime.count(), maxTime.count()));
+		p.timers[i] = {
+			Fseconds::zero(),
+			Fseconds(glm::linearRand(minTime.count(), maxTime.count())),
+			0.f
+		};
 	}
 }
 
-void BasicColorGen::generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId)
+void ColorGenerator::generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId)
 {
 	for (size_t i = startId; i < endId; ++i)
 	{

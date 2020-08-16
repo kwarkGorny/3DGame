@@ -20,7 +20,7 @@ struct ParticleTimer
 
 struct ParticlesContainer
 {
-	void initialize(const SharedShader& s, const SharedTexture& t, std::size_t maxSize);
+	void initialize(const SharedShader& s, std::size_t maxSize);
 	void deinitialize();
 	void kill(std::size_t id);
 	void wake(std::size_t id);
@@ -41,7 +41,6 @@ struct ParticlesContainer
 	unsigned int positionBuffer;
 	unsigned int colorBuffer;
 	SharedShader shader;
-	SharedTexture texture;
 
 	bool initialized = false;
 
@@ -56,10 +55,10 @@ public:
 	virtual void generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId) = 0;
 };
 
-class BoxPosGen : public ParticlesGenerator
+class PositionGenerator : public ParticlesGenerator
 {
 public:
-	BoxPosGen(glm::vec3 position, glm::vec3 offset)
+	PositionGenerator(glm::vec3 position, glm::vec3 offset)
 		: position{position}
 		, offset{offset}
 	{};
@@ -68,22 +67,10 @@ public:
 	glm::vec3 offset;
 };
 
-class RoundPositionGenerator : public ParticlesGenerator
+class VelocityGenerator : public ParticlesGenerator
 {
 public:
-	RoundPositionGenerator(glm::vec3 position, float radius)
-		: position{position}
-		, radius{radius}
-	{}
-	void generate(Fseconds dt, ParticlesContainer& p, size_t startId, size_t endId) final;
-	glm::vec3 position;
-	float radius = 0.f;
-};
-
-class BasicVelGen : public ParticlesGenerator
-{
-public:
-	BasicVelGen(glm::vec3 minVel, glm::vec3 maxVel)
+	VelocityGenerator(glm::vec3 minVel, glm::vec3 maxVel)
 		: minStartVel{ minVel }
 		, maxStartVel{ maxVel }
 	{}
@@ -92,10 +79,10 @@ public:
 	glm::vec3 maxStartVel;
 };
 
-class BasicTimeGen : public ParticlesGenerator
+class TimeGenerator : public ParticlesGenerator
 {
 public:
-	BasicTimeGen(Fseconds minT, Fseconds maxT)
+	TimeGenerator(Fseconds minT, Fseconds maxT)
 		: minTime{minT}
 		, maxTime{maxT}
 	{};
@@ -104,10 +91,10 @@ public:
 	Fseconds maxTime;
 };
 
-class BasicColorGen : public ParticlesGenerator
+class ColorGenerator : public ParticlesGenerator
 {
 public:
-	BasicColorGen(glm::vec4 minStartCol, glm::vec4 maxStartCol,	glm::vec4 minEndCol, glm::vec4 maxEndCol)
+	ColorGenerator(glm::vec4 minStartCol, glm::vec4 maxStartCol,	glm::vec4 minEndCol, glm::vec4 maxEndCol)
 		: minStartCol(minStartCol)
 		, maxStartCol(maxStartCol)
 		, minEndCol(minEndCol)
@@ -124,6 +111,8 @@ public:
 
 struct ParticlesEmmiter
 {
+	Fseconds duration;
 	float emitRate = 0.0f;
 	std::vector<std::unique_ptr<ParticlesGenerator>> generators = {};
+	bool infinite = false;
 };

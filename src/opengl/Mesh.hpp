@@ -43,6 +43,9 @@ struct MeshCPU
 
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
+    float width = 0;
+    float height = 0;
+    float depth = 0;
     //Material material;
 };
 
@@ -54,10 +57,16 @@ struct Mesh
 
     void bind()const;
 
+    glm::vec3 getSize()const { return { width, height, depth }; }
+
     const unsigned int vertexArrayId;
     const unsigned int vertexBufferId;
     const unsigned int indicesId;
     const unsigned int indicesCount;
+
+    const float width;
+    const float height;
+    const float depth;
     //Material material;
 };
 

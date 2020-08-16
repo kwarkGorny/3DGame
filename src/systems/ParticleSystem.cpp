@@ -1,6 +1,6 @@
 #include "ParticleSystem.hpp"
 
-
+#include "components/Transform.hpp"
 #include "components/Particles.hpp"
 
 #include "contexts/Camera.hpp"
@@ -9,8 +9,21 @@
 
 #include "opengl/GLDebug.hpp"
 
+namespace
+{
+	void onParticleContainerDestroyed(entt::registry& r, entt::entity e)
+	{
+		r.get<ParticlesContainer>(e).deinitialize();
+	}
+}
+
 namespace ParticleSystem
 {
+	void setup(entt::registry& registry)
+	{
+		registry.on_destroy<ParticlesContainer>().connect<&onParticleContainerDestroyed>();
+	}
+
 	void update(entt::registry& registry, Fseconds dt)
 	{
 		const auto dtCount = dt.count();
@@ -18,6 +31,16 @@ namespace ParticleSystem
 		for (const auto entity : emmiters)
 		{
 			auto& emmiter = emmiters.get<ParticlesEmmiter>(entity);
+			if (!emmiter.infinite)
+			{
+				emmiter.duration -= dt;
+				if (emmiter.duration <= Fseconds::zero())
+				{
+					registry.remove<ParticlesEmmiter>(entity);
+					continue;
+				}
+			}
+
 			const std::size_t maxNewParticles = static_cast<size_t>(dtCount * emmiter.emitRate);
 			if (maxNewParticles == 0)
 			{
@@ -84,14 +107,16 @@ namespace ParticleSystem
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 		glEnable(GL_PROGRAM_POINT_SIZE);
 
-		const auto view = registry.view<ParticlesContainer>();
+		const auto view = registry.view<ParticlesContainer, Transform>();
 		for (const auto entity : view)
 		{
-			const auto& particles = view.get(entity);
+			const auto& particles = view.get<ParticlesContainer>(entity);
 			if (particles.initialized && particles.countAlive == 0)
 			{
 				continue;
 			}
+			const auto& t = view.get<Transform>(entity);
+
 			glBindBuffer(GL_ARRAY_BUFFER, particles.positionBuffer);
 			glBufferSubData(GL_ARRAY_BUFFER, 0, particles.countAlive * sizeof(ParticlesContainer::PositionType), particles.positions.data());
 
@@ -102,8 +127,8 @@ namespace ParticleSystem
 
 			glBindVertexArray(particles.vao);
 
-			particles.texture->bind();
 			particles.shader->bind();
+			particles.shader->setUniform("u_Model", t.toModelMatrix());
 			particles.shader->setUniform("u_View", camera.view);
 			particles.shader->setUniform("u_Projection", camera.projection);
 

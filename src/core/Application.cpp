@@ -3,12 +3,14 @@
 #include "admins/InputAdmin.hpp"
 #include "admins/MeshAdmin.hpp"
 #include "admins/ShaderAdmin.hpp"
+#include "admins/MusicAdmin.hpp"
+#include "admins/SoundAdmin.hpp"
 #include "admins/TextureAdmin.hpp"
 
 #include "basic/Logger.hpp"
 #include "opengl/GLDebug.hpp"
 #include "opengl/Renderer.hpp"
-#include "scenes/TestScene.hpp"
+#include "scenes/GameScene.hpp"
 #include "sdl2/events.hpp"
 
 #include <thread>
@@ -21,13 +23,14 @@ bool Application::initialize(const std::string& title, int width, int height)noe
 	m_Window = sdl2::Window(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, sdl2::WindowFlags::OPENGL | sdl2::WindowFlags::SHOWN);
 	if (!m_Window.isValid())
 	{
+		logger::error("couldn't initialize sdl2 window! {}", SDL_GetError());
 		return false;
 	}
 
 	if (const auto context = m_Window.createGLContext();
 		context == nullptr)
 	{
-		logger::error("Error initializing gl context! {}", SDL_GetError());
+		logger::error("couldn't initialize gl context! {}", SDL_GetError());
 		return false;
 	}
 
@@ -35,7 +38,7 @@ bool Application::initialize(const std::string& title, int width, int height)noe
 	if (const auto glewError = glewInit();
 		glewError != GLEW_OK)
 	{
-		logger::error("Error initializing GLEW! {}", glewGetErrorString(glewError));
+		logger::error("couldn't initialize GLEW!: {}", glewGetErrorString(glewError));
 		return false;
 	}
 
@@ -49,12 +52,19 @@ bool Application::initialize(const std::string& title, int width, int height)noe
 
 	if (SDL_GL_SetSwapInterval(1) < 0)
 	{
-		logger::error("Warning: Unable to set VSync! SDL Error: {}", SDL_GetError());
+		logger::error("unable to set VSync! SDL Error: {}", SDL_GetError());
 		return false;
 	}
+
+	if (!sdl2::openMixerAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048))
+	{
+		logger::error("couldn't initialize sdl2 mixer audio! {}", SDL_GetError());
+		return false;
+	}
+
 	m_IsOpen = true;
 	Renderer::initialize();
-	m_Scenes.push_back(std::make_unique<TestScene>());
+	m_Scenes.push_back(std::make_unique<GameScene>());
 	return true;
 }
 
@@ -127,4 +137,7 @@ void Application::run(Fseconds fps, Fseconds maxDelay, Fseconds slowWarring)noex
 	g_MeshAdmin.clear();
 	g_ShaderAdmin.clear();
 	g_TextureAdmin.clear();
+	Renderer::deinitialize();
+	g_MusicAdmin.clear();
+	g_SoundAdmin.clear();
 }

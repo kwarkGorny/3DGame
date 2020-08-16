@@ -1,6 +1,7 @@
 #pragma once
 
 #include "basic/Timer.hpp"
+#include "components/Asteroid.hpp"
 
 #include <glm/vec2.hpp>
 #include <glm/ext/scalar_constants.hpp>
@@ -11,4 +12,5 @@ struct AsteroidSpawner
 	float asteroidFrequency = 1;
 	float asteroidFrequencyIncrease = 1;
 	glm::vec2 omegaRange = { -glm::pi<float>(), glm::pi<float>() };
+	Asteroid prefab;
 };

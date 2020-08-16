@@ -5,11 +5,11 @@
 
 #include <entt/entity/registry.hpp>
 
-class TestScene : public IScene
+class GameScene : public IScene
 {
 public:
-	TestScene();
-	virtual ~TestScene() = default;
+	GameScene();
+	virtual ~GameScene() = default;
 
 	bool update(Fseconds dt)noexcept final;
 	bool draw()noexcept final;

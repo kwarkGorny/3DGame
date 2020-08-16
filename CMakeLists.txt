@@ -5,12 +5,6 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     return()
 endif()
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(LIB_PATH_SUFFIX x64)
-else()
-  set(LIB_PATH_SUFFIX x86)
-endif()
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
@@ -21,6 +15,14 @@ project(
     DESCRIPTION "simple 3D shoot up game"
     LANGUAGES CXX C
 )
+
+if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+    message("++ 64 bit architecture") 
+    set(LIB_PATH_SUFFIX "x64")
+else() 
+    message("++ 32 bit architecture")
+    set(LIB_PATH_SUFFIX "x86")
+endif()
 
 include(Settings)
 include(Utils)
@@ -37,6 +39,9 @@ find_package(GLEW REQUIRED)
 list(APPEND CMAKE_PREFIX_PATH "${EXTERNAL_LOCATION}/SDL2/")
 find_package(SDL2 REQUIRED)
 
+list(APPEND CMAKE_PREFIX_PATH "${EXTERNAL_LOCATION}/SDL2_mixer/")
+find_package(SDL2_mixer REQUIRED)
+
 set(sources_folder "src")
 get_subdirectories(source_folders "${CMAKE_SOURCE_DIR}/${sources_folder}")
 foreach(folder ${source_folders})
@@ -47,6 +52,7 @@ list(APPEND libs PUBLIC
     project_warnings
     GLEW::GLEW
     SDL2::Main
+    SDL2::Mixer
     opengl32
     LuaLib
 )
@@ -106,6 +112,10 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo "Copying required dlls.."
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     "${EXTERNAL_LOCATION}/SDL2/lib/${LIB_PATH_SUFFIX}/SDL2.dll"
+    "${EXTERNAL_LOCATION}/SDL2_mixer/lib/${LIB_PATH_SUFFIX}/SDL2_mixer.dll"
+    "${EXTERNAL_LOCATION}/SDL2_mixer/lib/${LIB_PATH_SUFFIX}/libogg-0.dll"
+    "${EXTERNAL_LOCATION}/SDL2_mixer/lib/${LIB_PATH_SUFFIX}/libvorbisfile-3.dll"
+    "${EXTERNAL_LOCATION}/SDL2_mixer/lib/${LIB_PATH_SUFFIX}/libvorbis-0.dll"
     "${EXTERNAL_LOCATION}/glew/bin/Release/x64/glew32.dll"
     $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )

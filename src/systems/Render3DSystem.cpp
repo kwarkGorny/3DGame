@@ -23,10 +23,10 @@ namespace Render3DSystem
 		const auto& camera = *cameraPtr;
 
 		Light light = {
-			glm::vec3{1.f,-1.f, 1.f},
-			glm::vec3{1.f, 1.f, 1.f}, //ambient
-			glm::vec3{1.f, 1.f, 1.f}, //diffuse
-			glm::vec3{1.0f, 1.0f, 1.0f}  //specular
+			glm::vec3{1.f, -1.f, 1.f}, // direction
+			glm::vec3{1.f, 1.f, 1.f}, // ambient
+			glm::vec3{1.f, 1.f, 1.f}, // diffuse
+			glm::vec3{1.f, 1.f, 1.f} // specular
 		};
 
 
