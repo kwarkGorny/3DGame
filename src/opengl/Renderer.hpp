@@ -18,8 +18,6 @@ public:
 
 	static void draw(const Mesh& mesh, const Shader& shader);
 
-	static void drawQuad(const glm::vec4& position, const glm::vec4& size, const glm::vec4& color);
-
 	static void drawQuad();
 
 	static void flush();

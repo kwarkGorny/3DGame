@@ -1,9 +1,12 @@
 #include "EntitiesUtils.hpp"
 
 #include "admins/MeshAdmin.hpp"
+#include "admins/MessagesAdmin.hpp"
 #include "admins/ShaderAdmin.hpp"
 #include "admins/SoundAdmin.hpp"
 #include "admins/TextureAdmin.hpp"
+
+#include "basic/Logger.hpp"
 
 #include "contexts/ResourcesCache.hpp"
 
@@ -21,12 +24,16 @@
 #include "components/Transform.hpp"
 #include "components/Skybox.hpp"
 #include "components/Weapon.hpp"
+#include "components/OnObsolete.hpp"
+#include "components/Renderable2D.hpp"
 
 #include "opengl/Mesh.hpp"
 
-#include "basic/Logger.hpp"
+#include "scenes/Scenes.hpp"
+#include "scenes/RetryScene.hpp"
 
 #include <entt/entity/registry.hpp>
+#include <functional>
 #include <utility>
 
 void createResourcesCache(entt::registry& registry)
@@ -39,7 +46,6 @@ void createResourcesCache(entt::registry& registry)
             g_MeshAdmin["data/obj/asteroid3/asteroid3.obj"]
         },
         {
-            g_TextureAdmin["data/textures/particle.png"],
             g_TextureAdmin["data/obj/bullet/bullet.png"],
             g_TextureAdmin["data/obj/asteroid1/asteroid1.png"],
             g_TextureAdmin["data/obj/asteroid2/asteroid2.png"],
@@ -161,6 +167,31 @@ void createBackground(entt::registry& registry, float playerForwardVelocity)
     skybox.shader->setUniform("u_Skybox", 0);
 }
 
+void createPlayerExplosion(entt::registry& registry, glm::vec3 position)
+{
+    const auto explosion = registry.create();
+    registry.emplace<Transform>(explosion, position);
+    registry.emplace<TimedObsolete>(explosion, Fseconds(2));
+    auto& emmitter = registry.emplace<ParticlesEmmiter>(explosion);
+    emmitter.duration = Fseconds(1);
+    emmitter.emitRate = 2000;
+    emmitter.generators.emplace_back(new PositionGenerator(glm::vec3{ -0.5, -0.5, -0.5 }, glm::vec3{ 0.5, 0.5, 0.5 }));
+    emmitter.generators.emplace_back(new ColorGenerator(
+        glm::vec4{ 1.f, 1.f, 0.7f, 1.0 },
+        glm::vec4{ 1.f, 0.75f, 0.44f, 1.0 },
+        glm::vec4{ 1.f, 0.35f, 0.078f, 0.0 },
+        glm::vec4{ 1.f, 0.137f, 0.137f, 0.0 }
+    ));
+    emmitter.generators.emplace_back(new VelocityGenerator(glm::vec3{ -5.f, -5.f, -5.f }, glm::vec3{ 5.f, 5.f, 5.f }));
+    emmitter.generators.emplace_back(new TimeGenerator(Fseconds(0.75f), Fseconds(1.f)));
+
+    auto& container = registry.emplace<ParticlesContainer>(explosion);
+    container.initialize(g_ShaderAdmin["data/shaders/particle"], 1000);
+    registry.emplace<OnObsolete>(explosion, [](auto& r, auto e) {
+        g_MessagesAdmin.action([](Scenes& scenes) { scenes.push_back(std::make_unique<RetryScene>()); });
+    });
+}
+
 void createAsteroidExplosion(entt::registry& registry, glm::vec3 position, Fseconds explosionDuration)
 {
     const auto explosion = registry.create();
@@ -203,4 +234,22 @@ void createBulletExplosion(entt::registry& registry, glm::vec3 position)
 
     auto& container = registry.emplace<ParticlesContainer>(explosion);
     container.initialize(g_ShaderAdmin["data/shaders/particle"], 250);
+}
+
+void createSprite(entt::registry& registry, glm::vec3 position, glm::vec3 scale, const std::string& textureId)
+{
+    const auto entity = registry.create();
+    registry.emplace<Transform>(entity, position, glm::vec3{}, scale);
+    registry.emplace<Renderable2D>(entity, g_TextureAdmin[textureId]);
+}
+
+void createButton(entt::registry& registry, glm::vec3 position, glm::vec3 scale, const std::string& textureId, OnClickCallback&& onClick)
+{
+    const auto entity = registry.create();
+    registry.emplace<Transform>(entity, position, glm::vec3{}, scale);
+    auto& renderable = registry.emplace<Renderable2D>(entity, g_TextureAdmin[textureId]);
+    const glm::vec2 size = glm::vec2{ renderable.texture->getWidth() * scale.x, renderable.texture->getHeight() * scale.y } * 2.f;
+    registry.emplace<Rect2DCollider>(entity,  - size / 2.f, size);
+    registry.emplace<OnClick>(entity, std::move(onClick));
+
 }

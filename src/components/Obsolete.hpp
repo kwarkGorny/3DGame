@@ -1,2 +1,3 @@
+#include <functional>
 
 struct Obsolete {};

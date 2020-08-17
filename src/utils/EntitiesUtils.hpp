@@ -5,6 +5,7 @@
 #include "components/Kinetic.hpp"
 #include "components/Transform.hpp"
 #include "components/Asteroid.hpp"
+#include "components/OnClick.hpp"
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -52,6 +53,12 @@ void createAsteroidSpawner(entt::registry& registry, const AsteroidSpawnerData& 
 
 void createBackground(entt::registry& registry, float playerForwardVelocity);
 
+void createPlayerExplosion(entt::registry& registry, glm::vec3 position);
+
 void createAsteroidExplosion(entt::registry& registry, glm::vec3 position, Fseconds explosionDuration);
 
 void createBulletExplosion(entt::registry& registry, glm::vec3 position);
+
+void createSprite(entt::registry& registry, glm::vec3 position, glm::vec3 scale, const std::string& textureId);
+
+void createButton(entt::registry& registry, glm::vec3 position, glm::vec3 scale, const std::string& textureId, OnClickCallback&& onClick);

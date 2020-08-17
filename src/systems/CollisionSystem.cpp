@@ -75,7 +75,7 @@ namespace CollisionSystem
 				{
 					const auto& asteroidData = asteroids.get<Asteroid>(asteroid);
 					createAsteroidExplosion(registry, asteroidPos, asteroidData.explosionDuration);
-					createAsteroidExplosion(registry, playerPos, Fseconds(0.1));
+					createPlayerExplosion(registry, playerPos);
 					registry.emplace_or_replace<Obsolete>(player);
 					registry.emplace_or_replace<Obsolete>(asteroid);
 					g_SoundAdmin.play("data/sounds/explosion.wav");

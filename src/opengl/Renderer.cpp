@@ -77,11 +77,6 @@ void Renderer::draw(const Mesh& mesh, const Shader& shader)
 	draw(mesh);
 }
 
-void Renderer::drawQuad(const glm::vec4& position, const glm::vec4& size, const glm::vec4& color)
-{
-
-}
-
 void Renderer::drawQuad()
 {
 	glBindVertexArray(g_QuadVA);

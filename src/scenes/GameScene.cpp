@@ -1,6 +1,5 @@
 #include "GameScene.hpp"
 
-#include "admins/MessagesAdmin.hpp"
 #include "admins/MusicAdmin.hpp"
 #include "admins/ShaderAdmin.hpp"
 
@@ -25,9 +24,8 @@
 #include "systems/SkyboxSystem.hpp"
 #include "systems/TimedObsoleteSystem.hpp"
 #include "systems/WeaponSystem.hpp"
+#include "systems/OnObsoleteSystem.hpp"
 
-#include "scenes/Scenes.hpp"
-#include "scenes/RetryScene.hpp"
 
 #include "utils/EntitiesUtils.hpp"
 
@@ -88,18 +86,13 @@ bool GameScene::update(Fseconds dt) noexcept
 	ParticleSystem::update(m_Registry, dt);
 
 	TimedObsoleteSystem::update(m_Registry, dt);
-	ObsoleteSystem::update(m_Registry);
 
 #ifdef DEVELOPMENT
 	DebugSystem::update(m_Registry);
 #endif // DEVELOPMENT
-	if (m_Registry.view<Player>().empty())
-	{
-		g_MessagesAdmin.action([](Scenes& scenes) { 
-			scenes.pop_back();
-			scenes.push_back(std::make_unique<RetryScene>()); 
-		});
-	}
+
+	OnObsoleteSystem::update(m_Registry);
+	ObsoleteSystem::update(m_Registry);
 	return false;
 }
 
