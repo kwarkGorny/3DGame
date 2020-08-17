@@ -36,7 +36,6 @@ namespace Render3DSystem
 			const auto& t = entities.get<Transform>(entity);
 			const auto& renderable = entities.get<Renderable3D>(entity);
 			const auto& shader = *renderable.shader;
-			renderable.texture->bind();
 			shader.bind();
 			shader.setUniform("u_Material", renderable.material);
 			shader.setUniform("u_Light", light);
@@ -45,7 +44,9 @@ namespace Render3DSystem
 			shader.setUniform("u_Projection", camera.projection);
 			shader.setUniform("u_CameraPos", camera.position);
 			
-			Renderer::draw(*renderable.mesh);
+			renderable.texture->bind();
+			renderable.mesh->bind();
+			renderable.mesh->draw();
 		}
 	}
 }

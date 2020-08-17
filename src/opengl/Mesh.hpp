@@ -17,12 +17,17 @@ struct Vertex
     glm::vec2 texCoords;
 
     bool operator==(const Vertex& other) const {
+    bool operator==(const Vertex& other) const 
+    {
         return position == other.position && normal == other.normal && texCoords == other.texCoords;
     }
 };
 
-namespace std {
     template<> struct hash<Vertex> {
+namespace std 
+{
+    template<> struct hash<Vertex> 
+    {
         size_t operator()(Vertex const& vertex) const
         {
             return std::hash<glm::vec3>()(vertex.position) ^
@@ -34,19 +39,12 @@ namespace std {
 struct MeshCPU
 {
     explicit MeshCPU(const std::string& objFilePath, const std::string& mtlDirPath = "");
-    MeshCPU(const std::vector<Vertex>& v, const std::vector<unsigned int>& i) : vertices{v}, indices{i} {}
-
-    unsigned int createIndexBuffer()const;
-    unsigned int createVertexBuffer()const;
-    void setupVertexArray(unsigned int vertexArrayId, unsigned int vertexBufferId)const;
-
 
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     float width = 0;
     float height = 0;
     float depth = 0;
-    //Material material;
 };
 
 struct Mesh
@@ -55,19 +53,22 @@ struct Mesh
 
     ~Mesh();
 
+    void draw()const;
+
     void bind()const;
 
     glm::vec3 getSize()const { return { width, height, depth }; }
 
-    const unsigned int vertexArrayId;
-    const unsigned int vertexBufferId;
-    const unsigned int indicesId;
-    const unsigned int indicesCount;
+    unsigned int vertexArrayId;
+    unsigned int vertexBufferId;
+    unsigned int indicesId;
 
-    const float width;
-    const float height;
-    const float depth;
-    //Material material;
+    unsigned int indicesCount;
+    unsigned int vertexCount;
+
+    float width;
+    float height;
+    float depth;
 };
 
 using SharedMesh = std::shared_ptr<Mesh>;
