@@ -4,9 +4,9 @@
 
 void Scenes::update(Fseconds dt)
 {
-	for (auto& scene : m_Scenes)
+	for (auto itr = m_Scenes.rbegin(); itr != m_Scenes.rend(); ++itr)
 	{
-		if (!scene->update(dt))
+		if (!(*itr)->update(dt))
 		{
 			break;
 		}
@@ -26,9 +26,9 @@ void Scenes::draw()
 
 void Scenes::handleEvent(const SDL_Event& event)
 {
-	for (auto& scene : m_Scenes)
+	for (auto itr = m_Scenes.rbegin(); itr != m_Scenes.rend(); ++itr)
 	{
-		if (!scene->handleEvent(event))
+		if (!(*itr)->handleEvent(event))
 		{
 			break;
 		}

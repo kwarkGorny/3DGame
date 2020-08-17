@@ -2,6 +2,7 @@
 
 #include "admins/InputAdmin.hpp"
 #include "admins/MeshAdmin.hpp"
+#include "admins/MessagesAdmin.hpp"
 #include "admins/ShaderAdmin.hpp"
 #include "admins/MusicAdmin.hpp"
 #include "admins/SoundAdmin.hpp"
@@ -115,6 +116,7 @@ void Application::run(Fseconds fps, Fseconds maxDelay, Fseconds slowWarring)noex
 			for (int frameCount = static_cast<int>(dt / fps); frameCount != 0; --frameCount)
 			{
 				m_Scenes.update(fps);
+				g_MessagesAdmin.update(m_Scenes);
 			}
 
 			Renderer::clear();
