@@ -21,9 +21,9 @@ jobs:
         mkdir build
         cd build
         cmake ..
-        cmake --build .
+        cmake --build . --config Release
     - name: Upload artifacts
       uses: actions/upload-artifact@master
       with:
         name: 3DGame
-        path: build/bin/
+        path: build/bin/Release/
