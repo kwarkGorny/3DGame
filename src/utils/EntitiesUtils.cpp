@@ -70,7 +70,7 @@ void createPlayer(entt::registry& registry, const PlayerShipData& shipData)
     registry.emplace<Kinetic>(player);
     registry.emplace<Dynamic>(player, Dynamic{ glm::vec3{}, shipData.shipMass });
     registry.emplace<Player>(player, shipData.manoeuveringEnginesThrust);
-    registry.emplace<Weapon>(player, Weapon{ Timer{ shipData.shootingFrequency }, glm::vec3{0, 2, 0.f}, shipData.bulletsVelocity });
+    registry.emplace<Weapon>(player, Weapon{ Timer{ shipData.shootingFrequency }, glm::vec3{0, 4, 0.f}, shipData.bulletsVelocity });
 
 	auto& renderable = registry.emplace<Renderable3D>(player);
 	renderable.mesh = g_MeshAdmin["data/obj/ship/Transtellar.obj"];
