@@ -29,7 +29,7 @@ namespace Render2DSystem
 		shader->setUniform("u_Projection", camera.projection);
 
 
-		const auto entities = registry.group<Renderable2D, Transform>();
+		const auto entities = registry.view<Renderable2D, Transform>();
 		for (const auto entity : entities)
 		{
 			const auto& t = entities.get<Transform>(entity);

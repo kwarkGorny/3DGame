@@ -30,7 +30,7 @@ namespace Render3DSystem
 		};
 
 
-		const auto entities = registry.group<Renderable3D, Transform>();
+		const auto entities = registry.view<Renderable3D, Transform>();
 		for (const auto entity : entities)
 		{
 			const auto& t = entities.get<Transform>(entity);

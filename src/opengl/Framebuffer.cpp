@@ -11,16 +11,17 @@ FrameBuffer::FrameBuffer(int width, int height)
 	glGenFramebuffers(1, &m_Id);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_Id);
 
-	CHECK_GL(glGenTextures(1, &m_TextureId));
-	CHECK_GL(glBindTexture(GL_TEXTURE_2D, m_TextureId));
-
-	CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-	CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-	CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-	CHECK_GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glCreateTextures(GL_TEXTURE_2D, 1, &m_TextureId);
+	glBindTexture(GL_TEXTURE_2D, m_TextureId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureId, 0);
+
+	glGenRenderbuffers(1, &m_ObjectId);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_ObjectId);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_Width, m_Height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_ObjectId);
 
 	logger::error(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "Framebuffer not completed");
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

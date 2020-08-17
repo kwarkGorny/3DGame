@@ -137,5 +137,6 @@ namespace ParticleSystem
 
 		glEnable(GL_DEPTH_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDisable(GL_PROGRAM_POINT_SIZE);
 	}
 }

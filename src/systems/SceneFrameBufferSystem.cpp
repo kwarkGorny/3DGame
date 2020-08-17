@@ -30,6 +30,8 @@ namespace SceneFrameBufferSystem
 		sceneBuffer.framebuffer->unbind();
 		sceneBuffer.shader->bind();
 		sceneBuffer.framebuffer->bindTexture();
+		glDisable(GL_DEPTH_TEST);
 		Renderer::drawQuad();
+		glEnable(GL_DEPTH_TEST);
 	}
 }

@@ -26,7 +26,6 @@
 #include "systems/WeaponSystem.hpp"
 #include "systems/OnObsoleteSystem.hpp"
 
-
 #include "utils/EntitiesUtils.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>

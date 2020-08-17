@@ -45,7 +45,7 @@ void Renderer::initialize()
 	glBindVertexArray(g_QuadVA);
 	glGenBuffers(1, &g_QuadVB);
 	glBindBuffer(GL_ARRAY_BUFFER, g_QuadVB);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, quadVertices.size() * sizeof(float), quadVertices.data(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
