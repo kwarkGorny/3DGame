@@ -1,0 +1,29 @@
+name: Windows 10 MSVC Build
+
+on:
+  push:
+  pull_request:
+  release:
+
+jobs:
+  build:
+    name: Windows MSVC
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v2
+      with: 
+        submodules: true
+    - name: Build Windows
+      shell: bash
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
+    - name: Upload artifacts
+      uses: actions/upload-artifact@master
+      with:
+        name: 3DGame
+        path: build/bin/
