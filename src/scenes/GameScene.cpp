@@ -25,7 +25,6 @@
 #include "systems/TimedObsoleteSystem.hpp"
 #include "systems/WeaponSystem.hpp"
 #include "systems/OnObsoleteSystem.hpp"
-#include "systems/CameraShakeSystem.hpp"
 #include "systems/PostEffectsSystem.hpp"
 
 #include "utils/EntitiesUtils.hpp"
