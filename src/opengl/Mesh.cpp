@@ -111,7 +111,6 @@ void Mesh::draw()const
 {
     glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, nullptr);
     //glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-
 }
 
 void Mesh::bind()const

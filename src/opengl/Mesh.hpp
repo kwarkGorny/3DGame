@@ -16,17 +16,16 @@ struct Vertex
     glm::vec3 normal;
     glm::vec2 texCoords;
 
-    bool operator==(const Vertex& other) const {
     bool operator==(const Vertex& other) const 
     {
         return position == other.position && normal == other.normal && texCoords == other.texCoords;
     }
 };
 
-    template<> struct hash<Vertex> {
 namespace std 
 {
-    template<> struct hash<Vertex> 
+    template<> 
+    struct hash<Vertex> 
     {
         size_t operator()(Vertex const& vertex) const
         {

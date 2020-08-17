@@ -14,5 +14,4 @@ public:
 	static void drawQuad();
 
 	static void flush();
-
 };
