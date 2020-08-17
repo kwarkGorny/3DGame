@@ -5,6 +5,4 @@
 namespace DebugSystem
 {
 	void update(entt::registry& registry);
-
-	void draw(entt::registry& registry);
 }

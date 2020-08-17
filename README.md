@@ -9,6 +9,9 @@ Controls are very basics:
 ```
 A - to move left
 D - to move right
+F1(on release) - standard shader 
+F2(on release) - grey scale
+F3(on release) - color inversion
 ``` 
 ## Configuration:
 Basic gameplay parameters can be change form <a href="https://github.com/kwarkGorny/3DGame/blob/master/data/lua/config.lua">config.lua</a>

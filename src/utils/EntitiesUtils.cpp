@@ -54,7 +54,9 @@ void createResourcesCache(entt::registry& registry)
         {
             g_ShaderAdmin["data/shaders/basic"],
             g_ShaderAdmin["data/shaders/particle"],
-            g_ShaderAdmin["data/shaders/color"]
+            g_ShaderAdmin["data/shaders/framebufferShader"],
+            g_ShaderAdmin["data/shaders/postEffects/inversion"],
+            g_ShaderAdmin["data/shaders/postEffects/greyScale"]
         },
         {
             g_SoundAdmin["data/sounds/explosion.wav"],

@@ -25,6 +25,8 @@
 #include "systems/TimedObsoleteSystem.hpp"
 #include "systems/WeaponSystem.hpp"
 #include "systems/OnObsoleteSystem.hpp"
+#include "systems/CameraShakeSystem.hpp"
+#include "systems/PostEffectsSystem.hpp"
 
 #include "utils/EntitiesUtils.hpp"
 
@@ -82,6 +84,8 @@ bool GameScene::update(Fseconds dt) noexcept
 	SceneBoundSystem::update(m_Registry);
 	CollisionSystem::update(m_Registry);
 
+	CameraShakeSystem::update(m_Registry, dt);
+
 	ParticleSystem::update(m_Registry, dt);
 
 	TimedObsoleteSystem::update(m_Registry, dt);
@@ -101,14 +105,12 @@ bool GameScene::draw() noexcept
 	SkyboxSystem::draw(m_Registry);
 	ParticleSystem::draw(m_Registry);
 	Render3DSystem::draw(m_Registry);
-#ifdef DEVELOPMENT
-	DebugSystem::draw(m_Registry);
-#endif // DEVELOPMENT
 	SceneFrameBufferSystem::postdraw(m_Registry);
 	return true;
 }
 
 bool GameScene::handleEvent(const SDL_Event& event) noexcept
 {
+	PostEffectsSystem::handleEvent(m_Registry, event);
 	return false;
 }
