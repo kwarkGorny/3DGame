@@ -16,11 +16,14 @@
 struct PlayerShipData
 {
 	explicit PlayerShipData(const sol::lua_table& table)
-		: shootingFrequency(table["canonShootingFrequency"].get_or(1))
+		: shootingFrequency()
 		, bulletsVelocity(table["canonBulletsVelocity"].get_or(1.f))
 		, manoeuveringEnginesThrust(table["manoeuveringEnginesThrust"].get_or(1.f))
 		, shipMass(table["spaceShipMass"].get_or(1.f))
-	{}
+	{
+		const auto frequency = table["canonShootingFrequency"].get_or(1.f);
+		shootingFrequency = Fseconds(frequency > 0 ? (1.f / frequency) : 1.f);
+	}
 	Fseconds shootingFrequency = std::chrono::seconds(1);
 	float bulletsVelocity = 1.f;
 	float manoeuveringEnginesThrust = 1.f;
