@@ -7,9 +7,3 @@ struct Kinetic
 	glm::vec3 velocity = glm::vec3(0.f);
 	glm::vec3 omega = glm::vec3(0.f);
 };
-
-struct KineticConstraint
-{
-	float maxVelocity = 10.f;
-	float maxOmega = 10.f;
-};
