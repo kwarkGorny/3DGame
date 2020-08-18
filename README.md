@@ -1,11 +1,7 @@
 # 3DGame
-2.5D top down space shooter made in 2 weeks using C++17 in OpenGL.
-
-## Gameplay:
-Standard top-down shooter just destroy as much asteroids as you can before getting your ship wreck.
+2.5D top-down space shooter just destroy as much asteroids as you can before getting your ship wreck.
 
 ## Controls:
-Controls are very basics:
 ```
 A - to move left
 D - to move right
@@ -17,13 +13,13 @@ F3(on release) - color inversion
 Basic gameplay parameters can be change form <a href="https://github.com/kwarkGorny/3DGame/blob/master/data/lua/config.lua">config.lua</a>
 ```lua
 return {
-    canonShootingFrequency = 0.5, -- shoots per second
-    canonBulletsVelocity = 15, -- meters per second
+    canonShootingFrequency = 2, -- shoots per second
+    canonBulletsVelocity = 20, -- meters per second
     spaceShipForwardVelocity = 10, -- meters per second
     asteroidsAngularVelocityRange = {-math.pi, math.pi}, -- radians per second
     explosionDuration = 0.1, -- seconds
-    manoeuveringEnginesThrust = 25, -- newtons
-    spaceShipMass = 2, -- kilograms
+    manoeuveringEnginesThrust = 100000, -- newtons
+    spaceShipMass = 5000, -- kilograms
     initialAsteroidAppearanceFrequency = 1, -- number per seconds
     asteroidAppearanceFrequencyIncrease = 0.01 -- number per seconds
 }
@@ -42,14 +38,14 @@ All third-party libraries are located in <a href="https://github.com/kwarkGorny/
 * <a href="http://glew.sourceforge.net/">glew</a>
 
 ## Building:
-Project uses submodules so to build project you need to dowload them beside this is normal cmake project:
-```
+to build project you need to dowload submodules from external folder after then you can generate project using cmake:
+```bash
 git clone --recursive https://github.com/kwarkGorny/3DGame.git
 cd 3DGame
 mkdir build
 cd build
 cmake ..
-cmake --build .
+cmake --build . --config Release
 ```
 
 ## Assets:
@@ -58,7 +54,7 @@ cmake --build .
 * <a href="https://wwwtyro.github.io/space-3d">Skybox</a>
 * <a href="https://opengameart.org/content/space-shooter-sound-effects">Sounds</a>
 * <a href="https://opengameart.org/content/space-shooter-music">Music</a>
-* Asteroids where created by me using <a href="https://ephtracy.github.io/">MagicaVoxel</a>.
+* Asteroids and bullet where created using <a href="https://ephtracy.github.io/">MagicaVoxel</a>.
 
 ## Preview:
 ToDo
