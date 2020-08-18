@@ -83,8 +83,6 @@ bool GameScene::update(Fseconds dt) noexcept
 	SceneBoundSystem::update(m_Registry);
 	CollisionSystem::update(m_Registry);
 
-	CameraShakeSystem::update(m_Registry, dt);
-
 	ParticleSystem::update(m_Registry, dt);
 
 	TimedObsoleteSystem::update(m_Registry, dt);
