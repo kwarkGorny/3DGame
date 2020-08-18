@@ -29,6 +29,8 @@ FrameBuffer::FrameBuffer(int width, int height)
 
 FrameBuffer::~FrameBuffer()
 {
+	glDeleteTextures(1, &m_TextureId);
+	glDeleteRenderbuffers(1, &m_ObjectId);
 	glDeleteFramebuffers(1, &m_Id);
 }
 
