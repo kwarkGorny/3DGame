@@ -1,13 +1,5 @@
 #include "Particles.hpp"
 
-#include "basic/Fseconds.hpp"
-
-#include "opengl/Shader.hpp"
-
-#include <memory>
-#include <vector>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
 #include <glm/gtc/random.hpp>
 #include <glm/ext/scalar_constants.hpp>
 

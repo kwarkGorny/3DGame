@@ -2,14 +2,11 @@
 #include "basic/Fseconds.hpp"
 
 #include "opengl/Shader.hpp"
-#include "opengl/Texture.hpp"
 
 #include <memory>
 #include <vector>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include <glm/gtc/random.hpp>
-#include <glm/common.hpp>
 
 struct ParticleTimer
 {

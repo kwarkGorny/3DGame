@@ -1,5 +1,4 @@
-
-#include <glm/mat4x4.hpp>
+#pragma once
 
 struct Player
 {

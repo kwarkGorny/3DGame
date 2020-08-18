@@ -1,6 +1,7 @@
 #include "Mesh.hpp"
 
 #include "basic/Logger.hpp"
+
 #include "GLDebug.hpp"
 
 #include <unordered_map>

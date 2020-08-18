@@ -2,8 +2,6 @@
 
 #include "scenes/Scenes.hpp"
 
-#include <sol/table.hpp>
-
 void MessagesAdmin::update(Scenes& scenes)noexcept
 {
 	for (const auto& action : m_Actions)

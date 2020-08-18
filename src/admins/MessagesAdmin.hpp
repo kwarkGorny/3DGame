@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <functional>
-#include <sol/forward.hpp>
 
 class Scenes;
 using Message = std::function<void(Scenes&)>;

@@ -12,8 +12,8 @@ public:
 	void bind(unsigned int slot = 0) const;
 	void unbind() const;
 
-	int getWidth()const { return m_Width; }
-	int getHeight()const { return m_Height; }
+	[[nodiscard]] int getWidth()const { return m_Width; }
+	[[nodiscard]] int getHeight()const { return m_Height; }
 
 private:
 	unsigned int m_Id = 0;

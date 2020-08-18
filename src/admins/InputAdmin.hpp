@@ -15,9 +15,7 @@ public:
 
 	[[nodiscard]] bool isMouseButtonDown()const noexcept { return m_MouseButtonDown; }
 
-	[[nodiscard]] glm::ivec2 getMousePosition()const noexcept;
-
-	[[nodiscard]] glm::vec2 getMousePositionF()const noexcept;
+	[[nodiscard]] glm::ivec2 getMousePosition()const noexcept { return m_MousePos; }
 
 private:
 	std::unordered_map<SDL_Keycode, bool> m_PressedKeys = {};

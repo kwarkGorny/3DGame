@@ -1,6 +1,5 @@
 #include "Application.hpp"
 
-
 int main(int argc, char* argv[]) 
 {
 	constexpr Fseconds fps{ std::chrono::milliseconds(16) };

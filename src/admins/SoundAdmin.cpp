@@ -2,6 +2,7 @@
 
 #include "basic/Logger.hpp"
 #include <utility>
+
 void SoundAdmin::initialize()noexcept
 {
 	Mix_ChannelFinished([](auto channel) { g_SoundAdmin.erase(channel); });

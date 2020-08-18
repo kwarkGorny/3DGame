@@ -2,13 +2,11 @@
 
 #include <spdlog/fmt/fmt.h>
 
-
 #ifdef DEVELOPMENT 
 #define ONLY_DEBUG(x) x;
 #else
 #define ONLY_DEBUG(x)
 #endif // DEVELOPMENT
-
 
 namespace logger
 {

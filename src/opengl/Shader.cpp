@@ -1,11 +1,7 @@
 #include "Shader.hpp"
 
-
 #include "basic/Logger.hpp"
 #include "GLDebug.hpp"
-
-#include <iostream>
-#include <memory>
 
 namespace
 {
@@ -22,11 +18,10 @@ namespace
 		{
 			int length;
 			CHECK_GL(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
-			std::unique_ptr<char[]> str(new char[length]);
-			CHECK_GL(glGetShaderInfoLog(id, length, &length, str.get()));
-			std::cout << "FAILED TO COMPILED SHADER: " << (type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT") << " " << str.get() << '\n';
+			std::unique_ptr<char[]> log(new char[length]);
+			CHECK_GL(glGetShaderInfoLog(id, length, &length, log.get()));
+			logger::error("couldn't compile {} shader log: {}", (type == GL_VERTEX_SHADER ? "vertex" : "fragment"), log.get());
 		}
-
 		return id;
 	}
 

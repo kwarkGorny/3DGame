@@ -2,9 +2,11 @@
 
 #include "GLDebug.hpp"
 
-#include <gl/glew.h>
-#include <stb/stb_image.h>
 #include <array>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
+#undef STB_IMAGE_IMPLEMENTATION
 
 namespace
 {

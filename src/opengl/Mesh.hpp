@@ -1,14 +1,11 @@
 #pragma once
 
 #include <vector>
-#include <string>
 #include <memory>
 
-#include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 #include <glm/gtx/hash.hpp>
-
-#include "Material.hpp"
 
 struct Vertex 
 {
@@ -16,7 +13,7 @@ struct Vertex
     glm::vec3 normal;
     glm::vec2 texCoords;
 
-    bool operator==(const Vertex& other) const 
+    [[nodiscard]] bool operator==(const Vertex& other) const
     {
         return position == other.position && normal == other.normal && texCoords == other.texCoords;
     }
@@ -56,7 +53,7 @@ struct Mesh
 
     void bind()const;
 
-    glm::vec3 getSize()const { return { width, height, depth }; }
+    [[nodiscard]] glm::vec3 getSize()const { return { width, height, depth }; }
 
     unsigned int vertexArrayId;
     unsigned int vertexBufferId;

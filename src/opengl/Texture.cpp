@@ -3,9 +3,8 @@
 #include "basic/Logger.hpp"
 
 #include "GLDebug.hpp"
-#define STB_IMAGE_IMPLEMENTATION
+
 #include <stb/stb_image.h>
-#undef STB_IMAGE_IMPLEMENTATION
 
 Texture::Texture(const std::string& filePath)
 {
@@ -21,7 +20,7 @@ Texture::Texture(const std::string& filePath)
 	CHECK_GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer));
 	stbi_image_free(buffer);
 	
-	unbind();
+	CHECK_GL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
 Texture::~Texture()

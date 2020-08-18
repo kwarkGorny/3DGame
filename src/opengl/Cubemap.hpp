@@ -4,17 +4,17 @@
 #include <memory>
 #include <array>
 
-class Cubemap
+class [[nodiscard]] Cubemap
 {
 public:
-	Cubemap(const std::array<std::string, 6>& facesFilePaths);
+	explicit Cubemap(const std::array<std::string, 6>& facesFilePaths);
 	~Cubemap();
 
 	void bind(unsigned int slot = 0) const;
 	void unbind() const;
 
-	int getVAO()const { return m_VAO; }
-	int getVBO()const { return m_VBO; }
+	[[nodiscard]] int getVAO()const { return m_VAO; }
+	[[nodiscard]] int getVBO()const { return m_VBO; }
 
 private:
 	unsigned int m_Id = 0;

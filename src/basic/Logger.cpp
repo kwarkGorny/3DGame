@@ -5,7 +5,6 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #endif // DEVELOPMENT
 
-
 namespace logger
 {
 	void info(const char* message) noexcept

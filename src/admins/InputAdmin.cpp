@@ -34,13 +34,3 @@ bool InputAdmin::isKeyPressed(SDL_Keycode code)const noexcept
 	const auto itr = m_PressedKeys.find(code);
 	return itr != m_PressedKeys.cend() && itr->second;
 }
-
-glm::ivec2 InputAdmin::getMousePosition()const noexcept
-{
-	return m_MousePos;
-}
-
-glm::vec2 InputAdmin::getMousePositionF()const noexcept
-{
-	return glm::vec2{ m_MousePos };
-}

@@ -1,3 +1,3 @@
-#include <functional>
+#pragma once
 
 struct Obsolete {};

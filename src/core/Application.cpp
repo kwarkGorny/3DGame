@@ -9,7 +9,6 @@
 #include "admins/TextureAdmin.hpp"
 
 #include "basic/Logger.hpp"
-#include "opengl/GLDebug.hpp"
 #include "opengl/Renderer.hpp"
 #include "scenes/GameScene.hpp"
 #include "sdl2/events.hpp"

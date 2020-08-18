@@ -1,8 +1,8 @@
 #include "FileUtils.hpp"
 
-#include <fstream>
-
 #include "basic/Logger.hpp"
+
+#include <fstream>
 
 std::string loadFile(const std::string& filePath)
 {

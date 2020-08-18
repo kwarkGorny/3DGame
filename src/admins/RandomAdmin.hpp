@@ -5,8 +5,6 @@
 #include <glm/vec3.hpp>
 #include <glm/ext/scalar_constants.hpp>
 
-union SDL_Event;
-
 class RandomAdmin
 {
 public:

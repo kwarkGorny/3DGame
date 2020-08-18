@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-class FrameBuffer
+class [[nodiscard]] FrameBuffer
 {
 public:
 	FrameBuffer(int width, int height);
@@ -15,8 +15,8 @@ public:
 	void bindTexture()const;
 	void unbindTexture() const;
 
-	int getWidth()const { return m_Width; }
-	int getHeight()const { return m_Height; }
+	[[nodiscard]] int getWidth()const { return m_Width; }
+	[[nodiscard]] int getHeight()const { return m_Height; }
 
 public:
 	unsigned int m_Id = 0;

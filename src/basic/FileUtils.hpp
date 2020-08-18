@@ -2,4 +2,4 @@
 
 #include <string>
 
-std::string loadFile(const std::string& filePath);
+[[nodiscard]] std::string loadFile(const std::string& filePath);

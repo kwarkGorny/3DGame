@@ -1,13 +1,15 @@
 #pragma once
 
+#include "Material.hpp"
+#include "Light.hpp"
+
 #include <string>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
 #include <memory>
 #include <unordered_map>
 
-#include "Material.hpp"
-#include "Light.hpp"
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
 
 class Shader
 {
@@ -22,7 +24,6 @@ public:
 	void bind()const;
 	void unbind()const;
 
-
 	void setUniform(const std::string& name, int v)const;
 	void setUniform(const std::string& name, float v)const;
 	void setUniform(const std::string& name, const glm::vec3& v)const;
@@ -31,7 +32,7 @@ public:
 	void setUniform(const std::string& name, const Material& m)const;
 	void setUniform(const std::string& name, const Light& l)const;
 
-	int getLocation(const std::string& name)const;
+	[[nodiscard]] int getLocation(const std::string& name)const;
 
 private:
 	unsigned int m_Id;

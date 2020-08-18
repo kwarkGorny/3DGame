@@ -9,7 +9,7 @@
 class Application
 {
 public:
-	bool initialize(const std::string& title, int width, int height)noexcept;
+	[[nodiscard]] bool initialize(const std::string& title, int width, int height)noexcept;
 
 	void run(Fseconds fps, Fseconds maxDelay, Fseconds slowWarring)noexcept;
 
